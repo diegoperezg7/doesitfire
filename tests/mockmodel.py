@@ -20,6 +20,7 @@ import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 FIRE = re.compile(r"fire:([a-z0-9-]+)")
+SEEN_RESPONSES_ROLES: set[str] = set()  # roles of Responses API input items, for tests
 
 
 def _text_of(content) -> str:
@@ -256,6 +257,9 @@ class Handler(BaseHTTPRequestHandler):
 
     # --- OpenAI Responses -----------------------------------------------------
     def api_responses(self, body: dict) -> None:
+        for item in body.get("input") or []:
+            if isinstance(item, dict) and item.get("role"):
+                SEEN_RESPONSES_ROLES.add(item["role"])
         skill = decide_responses(body)
         model = body.get("model", "mock-model")
         if skill:

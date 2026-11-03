@@ -87,7 +87,7 @@ def test_ollama_model_not_found(tmp_path, monkeypatch):
 
 
 class FakeBox:
-    def __init__(self, allow, image=None):
+    def __init__(self, allow, image=None, developer_as_system=False):
         self.calls = 0
 
     def __enter__(self):
@@ -230,3 +230,23 @@ def test_report_rejects_foreign_json(tmp_path):
     p.write_text('{"hello": 1}')
     r = CliRunner().invoke(cli.app, ["report", str(p)])
     assert r.exit_code != 0
+
+
+def test_resume_skips_finished_runs(tmp_path, fake_docker, monkeypatch):
+    monkeypatch.setattr(runner, "check_ollama_model", lambda p, m: None)
+    cfg = cfg_for(tmp_path, {"opencode": {"provider": "ollama", "model": "m"}})
+    first = runner.run_matrix(cfg)
+    partial = dict(first, trials=first["trials"][:4], duration_s=100.0)
+    partial["trials"].append(dict(first["trials"][0], prompt="no longer in the config"))
+    calls = []
+    orig = FakeBox.run
+
+    def counting(self, *a, **k):
+        calls.append(1)
+        return orig(self, *a, **k)
+
+    monkeypatch.setattr(FakeBox, "run", counting)
+    resumed = runner.run_matrix(cfg, resume=partial)
+    assert len(calls) == 2
+    assert len(resumed["trials"]) == 6 and resumed["sessions"] == 2
+    assert resumed["duration_s"] >= 100.0

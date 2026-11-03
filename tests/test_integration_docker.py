@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 @pytest.mark.docker
 def test_real_clis_against_mock_model(monkeypatch):
-    from mockmodel import serve
+    from mockmodel import SEEN_RESPONSES_ROLES, serve
 
     srv = serve(0, "0.0.0.0")
     try:
@@ -23,6 +23,8 @@ def test_real_clis_against_mock_model(monkeypatch):
         results = run_matrix(cfg, max_cost=0)
     finally:
         srv.shutdown()
+    # Ollama drops "developer" messages, where Codex lists skills; the proxy rewrites them.
+    assert "system" in SEEN_RESPONSES_ROLES and "developer" not in SEEN_RESPONSES_ROLES
     errors = [t for t in results["trials"] if t["error"]]
     assert not errors, errors
     s = summarize(results)

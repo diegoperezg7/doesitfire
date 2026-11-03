@@ -103,6 +103,7 @@ def run(
         float | None, typer.Option(help="Exit 1 if any false-fire rate is above this (0-1).")
     ] = None,
     rebuild: Annotated[bool, typer.Option(help="Rebuild the agent Docker image.")] = False,
+    resume: Annotated[bool, typer.Option(help="Continue an interrupted run from OUT/results.partial.json.")] = False,
     open_report: Annotated[bool, typer.Option("--open/--no-open", help="Open the HTML report when done.")] = True,
 ) -> None:
     """Run every agent on every prompt and report how often each skill fires."""
@@ -153,6 +154,11 @@ def run(
     def checkpoint(results: dict) -> None:
         partial_file.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
 
+    previous = None
+    if resume:
+        if not partial_file.is_file():
+            raise DoesItFireError(f"Nothing to resume: {partial_file} does not exist.")
+        previous = _load_results(partial_file)
     partial = None
     try:
         results = run_matrix(
@@ -162,6 +168,7 @@ def run(
             progress=progress,
             checkpoint=checkpoint,
             logs_dir=out / "logs",
+            resume=previous,
             rebuild=rebuild,
         )
     except BudgetExceeded as exc:

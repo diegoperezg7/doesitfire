@@ -9,6 +9,27 @@ const allow = new Set(
   (process.env.DOESITFIRE_ALLOW || "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean),
 );
 const port = Number(process.env.DOESITFIRE_PROXY_PORT || 8888);
+// Ollama's OpenAI Responses endpoint drops input messages with role "developer", which is
+// where Codex puts its skill list. For local Ollama only (plain HTTP), rewrite them to
+// "system", which Ollama keeps. HTTPS traffic to paid APIs is tunnelled and never touched.
+const developerAsSystem = process.env.DOESITFIRE_DEVELOPER_AS_SYSTEM === "1";
+
+function rewriteDeveloper(buf) {
+  try {
+    const body = JSON.parse(buf.toString("utf8"));
+    if (!Array.isArray(body.input)) return buf;
+    let changed = false;
+    for (const item of body.input) {
+      if (item && item.role === "developer") {
+        item.role = "system";
+        changed = true;
+      }
+    }
+    return changed ? Buffer.from(JSON.stringify(body), "utf8") : buf;
+  } catch {
+    return buf;
+  }
+}
 
 function allowed(host, p) {
   return allow.has(`${String(host).toLowerCase()}:${p}`);
@@ -34,19 +55,33 @@ const server = http.createServer((req, res) => {
   const headers = { ...req.headers };
   delete headers["proxy-connection"];
   delete headers["proxy-authorization"];
-  const upstream = http.request(
-    { host: url.hostname, port: p, method: req.method, path: url.pathname + url.search, headers },
-    (up) => {
-      res.writeHead(up.statusCode || 502, up.headers);
-      up.pipe(res);
-    },
-  );
-  upstream.on("error", () => {
-    if (!res.headersSent) res.writeHead(502);
-    res.end();
-  });
-  res.on("close", () => upstream.destroy());
-  req.pipe(upstream);
+  const forward = (body) => {
+    if (body) {
+      headers["content-length"] = String(body.length);
+      delete headers["transfer-encoding"];
+    }
+    const upstream = http.request(
+      { host: url.hostname, port: p, method: req.method, path: url.pathname + url.search, headers },
+      (up) => {
+        res.writeHead(up.statusCode || 502, up.headers);
+        up.pipe(res);
+      },
+    );
+    upstream.on("error", () => {
+      if (!res.headersSent) res.writeHead(502);
+      res.end();
+    });
+    res.on("close", () => upstream.destroy());
+    if (body) upstream.end(body);
+    else req.pipe(upstream);
+  };
+  if (developerAsSystem && req.method === "POST" && url.pathname.endsWith("/responses")) {
+    const chunks = [];
+    req.on("data", (c) => chunks.push(c));
+    req.on("end", () => forward(rewriteDeveloper(Buffer.concat(chunks))));
+  } else {
+    forward(null);
+  }
 });
 
 server.on("connect", (req, socket, head) => {

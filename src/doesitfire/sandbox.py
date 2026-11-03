@@ -101,12 +101,13 @@ class RunOutput:
 class Sandbox:
     """An internal Docker network plus an egress proxy, for one `doesitfire run`."""
 
-    def __init__(self, allow_urls: list[str], image: str = IMAGE):
+    def __init__(self, allow_urls: list[str], image: str = IMAGE, developer_as_system: bool = False):
         self.run_id = uuid.uuid4().hex[:10]
         self.image = image
         self.network = f"doesitfire-{self.run_id}"
         self.proxy = f"doesitfire-{self.run_id}-egress"
         self.allow = sorted({host_port(u) for u in allow_urls})
+        self.developer_as_system = developer_as_system
 
     def __enter__(self) -> Sandbox:
         _docker("network", "create", "--internal", "--label", f"{LABEL}={self.run_id}", self.network)
@@ -135,6 +136,8 @@ class Sandbox:
                 "64",
                 "-e",
                 f"DOESITFIRE_ALLOW={','.join(self.allow)}",
+                "-e",
+                f"DOESITFIRE_DEVELOPER_AS_SYSTEM={'1' if self.developer_as_system else '0'}",
                 "--entrypoint",
                 "node",
                 self.image,

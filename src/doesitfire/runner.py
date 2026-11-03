@@ -117,6 +117,7 @@ def run_matrix(
     progress: Callable[[dict], None] | None = None,
     checkpoint: Callable[[dict], None] | None = None,
     logs_dir: Path | None = None,
+    resume: dict | None = None,
     image: str = IMAGE,
     rebuild: bool = False,
 ) -> dict:
@@ -153,6 +154,7 @@ def run_matrix(
         "cost_usd": 0.0,
         "partial": False,
         "stop_reason": None,
+        "sessions": 1,
         "recorded": False,
     }
 
@@ -164,12 +166,30 @@ def run_matrix(
         for expect, prompts in (("fire", skill.should_fire), ("no_fire", skill.should_not_fire))
         for prompt in prompts
     ]
+    previous_duration = 0.0
+    if resume:
+        # Keep finished trials of an interrupted run with the same plan, run only the rest.
+        keys = {(a.cfg.name, s.name, p, e, r) for r, a, s, p, e in plan}
+        kept = [
+            t
+            for t in resume.get("trials", [])
+            if (t["agent"], t["skill"], t["prompt"], t["expect"], t["repeat"]) in keys
+        ]
+        done = {(t["agent"], t["skill"], t["prompt"], t["expect"], t["repeat"]) for t in kept}
+        plan = [x for x in plan if (x[1].cfg.name, x[2].name, x[3], x[4], x[0]) not in done]
+        results["trials"] = kept
+        results["cost_usd"] = round(sum(t.get("cost_usd") or 0.0 for t in kept), 6)
+        results["started_at"] = resume.get("started_at") or results["started_at"]
+        results["sessions"] = int(resume.get("sessions") or 1) + 1
+        previous_duration = float(resume.get("duration_s") or 0.0)
+        log(f"Resuming: {len(kept)} runs already done, {len(plan)} to go.")
     max_seen: dict[str, float] = {}
     t0 = time.monotonic()
     with tempfile.TemporaryDirectory(prefix="doesitfire-") as tmp:
         staged = stage_skills([(s.name, s.path) for s in cfg.skills], Path(tmp) / "skills")
         allow = [u for a in agents for u in a.build("x").allow]
-        with Sandbox(allow, image=image) as box:
+        developer_as_system = any(a.cfg.name == "codex" and a.provider.name == "ollama" for a in agents)
+        with Sandbox(allow, image=image, developer_as_system=developer_as_system) as box:
             for i, (rep, agent, skill, prompt, expect) in enumerate(plan, 1):
                 spent = results["cost_usd"]
                 if agent.provider.paid:
@@ -188,7 +208,8 @@ def run_matrix(
                 raw = trial.pop("_raw")
                 if logs_dir is not None:
                     logs_dir.mkdir(parents=True, exist_ok=True)
-                    name = f"{i:04d}-{agent.cfg.name}-{skill.name}-{expect}-r{rep}.jsonl"
+                    n = len(results["trials"]) + 1
+                    name = f"{n:04d}-{agent.cfg.name}-{skill.name}-{expect}-r{rep}.jsonl"
                     (logs_dir / name).write_text(raw, encoding="utf-8")
                     trial["log"] = f"logs/{name}"
                 cost = run_cost(agent.provider, agent.cfg, trial.pop("_obs"))
@@ -199,12 +220,13 @@ def run_matrix(
                 if progress:
                     progress({"done": i, "total": len(plan), "trial": trial})
                 if checkpoint:
+                    results["duration_s"] = round(previous_duration + time.monotonic() - t0, 1)
                     checkpoint(results)
             denials = box.proxy_denials()
     results["blocked_egress"] = sorted(set(denials))
     finished = dt.datetime.now(dt.UTC)
     results["finished_at"] = finished.isoformat(timespec="seconds")
-    results["duration_s"] = round(time.monotonic() - t0, 1)
+    results["duration_s"] = round(previous_duration + time.monotonic() - t0, 1)
     if results["partial"]:
         raise BudgetExceeded(results["stop_reason"], results)
     return results
