@@ -14,6 +14,7 @@ from typing import Annotated
 
 import typer
 from rich.console import Console
+from rich.markup import escape
 
 from . import __version__
 from .config import CONFIG_NAME, find_skill_dirs, load_config, render_template
@@ -142,8 +143,8 @@ def run(
         tick = "[green]ok[/green]" if good else "[yellow]!![/yellow]"
         console.print(
             f"[dim]{p['done']:>4}/{p['total']}[/dim] {tick} {t['agent']:<11} {t['skill']:<20} {mark:<22} "
-            f"[dim]{t['duration_s']:>5.0f}s  {t['prompt'][:60]}[/dim]"
-            + (f"\n          [red]{t['error']}[/red]" if t["error"] else "")
+            f"[dim]{t['duration_s']:>5.0f}s  {escape(' '.join(t['prompt'].split())[:60])}[/dim]"
+            + (f"\n          [red]{escape(t['error'])}[/red]" if t["error"] else "")
         )
 
     out.mkdir(parents=True, exist_ok=True)
@@ -242,7 +243,7 @@ def main() -> None:
     try:
         app()
     except DoesItFireError as exc:
-        err.print(f"[bold red]Error:[/bold red] {exc}")
+        err.print(f"[bold red]Error:[/bold red] {escape(str(exc))}")
         sys.exit(exc.exit_code)
     except KeyboardInterrupt:
         err.print("[yellow]Interrupted.[/yellow]")

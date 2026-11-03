@@ -196,7 +196,20 @@ Sube `badge.svg` al repo y enlázalo, o publica `badge.json` (por ejemplo en Git
 
 ## Qué se ha probado en vivo
 
-{{LIVE}}
+| Agente | Probado en vivo con | Notas |
+|---|---|---|
+| Claude Code 2.1.317 | Ollama `qwen3:4b` (contexto de 16k) a través del endpoint `/v1/messages` compatible con Anthropic de Ollama | Sin modelo Claude: esta versión se construyó sin clave de Anthropic. `provider: anthropic` (API key o `CLAUDE_CODE_OAUTH_TOKEN` de `claude setup-token`) tiene tests unitarios, pero no se ha probado en vivo. |
+| Codex 0.166.0 | Ollama `qwen3:4b` a través de la Responses API | La detección es **experimental** (lecturas de `SKILL.md`). |
+| OpenCode 1.19.5 | Ollama `qwen3:4b` a través de Chat Completions | |
+
+Los proveedores de pago (Anthropic, OpenAI, OpenRouter, Mistral) están conectados y tienen tests unitarios, incluido el
+límite `--max-cost`, pero para construir esta versión no se llamó a ningún modelo de pago. En cada push, la CI ejecuta
+los tres CLIs reales en Docker contra un modelo simulado ([`tests/mockmodel.py`](tests/mockmodel.py)), así que si
+cambia la salida de un CLI se rompe la build, no tus resultados.
+
+Con un modelo local, doesitfire desactiva el thinking y limita la salida a 4.096 tokens en los tres agentes; un modelo
+de 4B que piensa miles de tokens por llamada hace que una matriz de 216 ejecuciones tarde un día. Los modelos de pago
+usan la configuración por defecto de cada CLI.
 
 ## Hoja de ruta
 

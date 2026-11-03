@@ -196,7 +196,18 @@ Commit `badge.svg` and link it, or publish `badge.json` (for example to GitHub P
 
 ## What was live-tested
 
-{{LIVE}}
+| Agent | Live-tested with | Notes |
+|---|---|---|
+| Claude Code 2.1.317 | Ollama `qwen3:4b` (16k context) through Ollama's Anthropic-compatible `/v1/messages` | No Claude model: this release was built without an Anthropic key. `provider: anthropic` (API key or `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`) is unit-tested, not live-tested. |
+| Codex 0.166.0 | Ollama `qwen3:4b` through the Responses API | Detection is **experimental** (reads of `SKILL.md`). |
+| OpenCode 1.19.5 | Ollama `qwen3:4b` through Chat Completions | |
+
+Paid providers (Anthropic, OpenAI, OpenRouter, Mistral) are wired and unit-tested, including the `--max-cost` guard,
+but no paid model was called to build this release. CI runs the three real CLIs in Docker against a scripted mock
+model ([`tests/mockmodel.py`](tests/mockmodel.py)) on every push, so a CLI output change breaks the build, not your results.
+
+With a local model, doesitfire turns thinking off and caps output at 4,096 tokens for all three agents; a 4B model
+that thinks for thousands of tokens per call makes a 216-run matrix take a day. Paid models run with the CLI defaults.
 
 ## Roadmap
 
