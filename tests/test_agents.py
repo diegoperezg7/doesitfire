@@ -32,8 +32,7 @@ def test_claude_build_ollama():
     assert "Bash" in inv.argv[inv.argv.index("--disallowedTools") + 1]
     assert inv.env["ANTHROPIC_BASE_URL"] == "http://host.docker.internal:11434"
     assert inv.env["SLASH_COMMAND_TOOL_CHAR_BUDGET"] == "8000"
-    assert inv.env["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] == "4096"
-    assert json.loads(inv.env["CLAUDE_CODE_EXTRA_BODY"]) == {"thinking": {"type": "disabled"}}
+    assert "CLAUDE_CODE_EXTRA_BODY" not in inv.env  # model defaults: thinking stays on
     assert inv.secret_env == {}
     assert inv.allow == ["http://host.docker.internal:11434"]
 
