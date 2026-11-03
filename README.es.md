@@ -207,9 +207,13 @@ límite `--max-cost`, pero para construir esta versión no se llamó a ningún m
 los tres CLIs reales en Docker contra un modelo simulado ([`tests/mockmodel.py`](tests/mockmodel.py)), así que si
 cambia la salida de un CLI se rompe la build, no tus resultados.
 
-Con un modelo local, doesitfire desactiva el thinking y limita la salida a 4.096 tokens en los tres agentes; un modelo
-de 4B que piensa miles de tokens por llamada hace que una matriz de 216 ejecuciones tarde un día. Los modelos de pago
-usan la configuración por defecto de cada CLI.
+Cada agente corre con la configuración por defecto de su CLI, thinking incluido. Desactivar el thinking de qwen3 en
+Ollama parece acelerar, pero el modelo escribe entonces su razonamiento como texto y se para antes de emitir la llamada
+a la herramienta, así que parece que las skills nunca se activan. doesitfire no lo hace.
+
+Hay una rareza de Ollama que se resuelve sola: la Responses API de Ollama descarta los mensajes con rol `developer`, que
+es donde Codex lista las skills disponibles. Solo para Codex con Ollama, el proxy de salida los reescribe a `system`
+(HTTP plano hacia tu Ollama local; el tráfico HTTPS hacia APIs de pago pasa por el túnel sin tocarse).
 
 ## Hoja de ruta
 

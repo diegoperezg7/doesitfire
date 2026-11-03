@@ -206,8 +206,13 @@ Paid providers (Anthropic, OpenAI, OpenRouter, Mistral) are wired and unit-teste
 but no paid model was called to build this release. CI runs the three real CLIs in Docker against a scripted mock
 model ([`tests/mockmodel.py`](tests/mockmodel.py)) on every push, so a CLI output change breaks the build, not your results.
 
-With a local model, doesitfire turns thinking off and caps output at 4,096 tokens for all three agents; a 4B model
-that thinks for thousands of tokens per call makes a 216-run matrix take a day. Paid models run with the CLI defaults.
+Every agent runs with its CLI defaults, thinking included. Turning qwen3's thinking off in Ollama looks like a speed-up,
+but the model then writes its reasoning as plain text and stops before emitting the tool call, so skills look like
+they never fire. doesitfire does not do that.
+
+One Ollama quirk is handled for you: Ollama's Responses API drops input messages with role `developer`, which is where
+Codex lists the available skills. For Codex on Ollama only, the egress proxy rewrites them to `system` (plain HTTP
+to your local Ollama; HTTPS traffic to paid APIs is tunnelled untouched).
 
 ## Roadmap
 
