@@ -53,7 +53,8 @@ git clone https://github.com/diegoperezg7/doesitfire && cd doesitfire && uv run 
 
 ## Ejemplo de salida
 
-{{RESULTS}}
+<!-- results:start -->
+<!-- results:end -->
 
 ## Prueba tus propias skills
 
@@ -76,7 +77,7 @@ así que crea una vez una variante de 16k (mismos pesos, sin descargar nada más
 
 ```bash
 ollama pull qwen3:4b
-ollama create doesitfire-qwen3:4b-16k -f ollama/Modelfile   # FROM qwen3:4b + PARAMETER num_ctx 16384
+ollama create qwen3:4b-16k -f ollama/Modelfile   # FROM qwen3:4b + PARAMETER num_ctx 16384
 ```
 
 En Linux, arranca Ollama con `OLLAMA_HOST=0.0.0.0` para que los contenedores lleguen a él.
@@ -150,8 +151,8 @@ cpus: 1           # por contenedor
 memory: 1g        # por contenedor
 
 agents:
-  claude-code: {provider: ollama, model: doesitfire-qwen3:4b-16k}
-  codex:       {provider: ollama, model: doesitfire-qwen3:4b-16k}
+  claude-code: {provider: ollama, model: qwen3:4b-16k}
+  codex:       {provider: ollama, model: qwen3:4b-16k}
   opencode:    false            # omitir un agente
 
 skills:

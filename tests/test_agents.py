@@ -9,7 +9,7 @@ from doesitfire.providers import get_provider
 SKILLS = {"regex-explainer", "commit-message"}
 
 
-def agent(name, provider="ollama", model="doesitfire-qwen3:4b-16k"):
+def agent(name, provider="ollama", model="qwen3:4b-16k"):
     return make_agent(AgentConfig(name, provider, model), get_provider(provider), 2)
 
 
@@ -75,7 +75,7 @@ def test_opencode_config_denies_side_effects():
     cfg = json.loads(inv.env["OPENCODE_CONFIG_CONTENT"])
     assert cfg["permission"] == {"edit": "deny", "bash": "deny", "webfetch": "deny"}
     assert cfg["agent"]["build"]["steps"] == 2
-    assert inv.argv[-3:] == ["-m", "doesitfire/doesitfire-qwen3:4b-16k", "hi"]
+    assert inv.argv[-3:] == ["-m", "doesitfire/qwen3:4b-16k", "hi"]
 
 
 def test_opencode_paid_key_is_env_reference(monkeypatch):

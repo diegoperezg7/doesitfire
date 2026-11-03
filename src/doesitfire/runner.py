@@ -68,7 +68,7 @@ def check_ollama_model(p: Provider, model: str) -> None:
         raise DoesItFireError(
             f"Model '{model}' not found in Ollama. Available: {', '.join(sorted(ids)) or 'none'}. "
             "Agent prompts need a 16k context; create the model with: "
-            "ollama pull qwen3:4b && ollama create doesitfire-qwen3:4b-16k -f ollama/Modelfile"
+            "ollama pull qwen3:4b && ollama create qwen3:4b-16k -f ollama/Modelfile"
         )
 
 

@@ -191,9 +191,9 @@ max_turns: 2      # agent turns per run; activation happens in the first one
 agents:
   # Local and free: needs Ollama (https://ollama.com) with a 16k context model,
   # see the README. Paid providers read keys from env vars only.
-  claude-code: {{provider: ollama, model: doesitfire-qwen3:4b-16k}}   # or provider: anthropic, model: claude-haiku-5-5
-  codex:       {{provider: ollama, model: doesitfire-qwen3:4b-16k}}   # or provider: openai
-  opencode:    {{provider: ollama, model: doesitfire-qwen3:4b-16k}}   # or provider: mistral / openrouter
+  claude-code: {{provider: ollama, model: qwen3:4b-16k}}   # or provider: anthropic, model: claude-haiku-5-5
+  codex:       {{provider: ollama, model: qwen3:4b-16k}}   # or provider: openai
+  opencode:    {{provider: ollama, model: qwen3:4b-16k}}   # or provider: mistral / openrouter
 
 skills:
 {skills}

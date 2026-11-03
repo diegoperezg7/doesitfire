@@ -53,7 +53,8 @@ git clone https://github.com/diegoperezg7/doesitfire && cd doesitfire && uv run 
 
 ## Example output
 
-{{RESULTS}}
+<!-- results:start -->
+<!-- results:end -->
 
 ## Test your own skills
 
@@ -76,7 +77,7 @@ The agent CLIs send 6k to 11k token prompts, and Ollama loads models with a 4k c
 
 ```bash
 ollama pull qwen3:4b
-ollama create doesitfire-qwen3:4b-16k -f ollama/Modelfile   # FROM qwen3:4b + PARAMETER num_ctx 16384
+ollama create qwen3:4b-16k -f ollama/Modelfile   # FROM qwen3:4b + PARAMETER num_ctx 16384
 ```
 
 On Linux, start Ollama with `OLLAMA_HOST=0.0.0.0` so containers can reach it.
@@ -150,8 +151,8 @@ cpus: 1           # per container
 memory: 1g        # per container
 
 agents:
-  claude-code: {provider: ollama, model: doesitfire-qwen3:4b-16k}
-  codex:       {provider: ollama, model: doesitfire-qwen3:4b-16k}
+  claude-code: {provider: ollama, model: qwen3:4b-16k}
+  codex:       {provider: ollama, model: qwen3:4b-16k}
   opencode:    false            # skip an agent
 
 skills:

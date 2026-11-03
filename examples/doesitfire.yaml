@@ -6,9 +6,9 @@ timeout: 900       # generous: a 4B model on a shared laptop queues requests
 max_turns: 2
 
 agents:
-  claude-code: {provider: ollama, model: doesitfire-qwen3:4b-16k}
-  codex:       {provider: ollama, model: doesitfire-qwen3:4b-16k}
-  opencode:    {provider: ollama, model: doesitfire-qwen3:4b-16k}
+  claude-code: {provider: ollama, model: qwen3:4b-16k}
+  codex:       {provider: ollama, model: qwen3:4b-16k}
+  opencode:    {provider: ollama, model: qwen3:4b-16k}
 
 skills:
   - path: skills/commit-message
