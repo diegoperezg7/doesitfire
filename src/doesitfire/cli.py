@@ -155,7 +155,13 @@ def run(
     partial = None
     try:
         results = run_matrix(
-            cfg, max_cost=max_cost, log=console.print, progress=progress, checkpoint=checkpoint, rebuild=rebuild
+            cfg,
+            max_cost=max_cost,
+            log=console.print,
+            progress=progress,
+            checkpoint=checkpoint,
+            logs_dir=out / "logs",
+            rebuild=rebuild,
         )
     except BudgetExceeded as exc:
         partial = exc

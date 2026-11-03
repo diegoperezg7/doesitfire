@@ -72,10 +72,39 @@ def check_ollama_model(p: Provider, model: str) -> None:
         )
 
 
+def hardware() -> str | None:
+    """A short CPU and memory label, e.g. 'Apple M4, 16 GB'. Best effort, no network."""
+    import os
+    import subprocess
+
+    cpu, mem = None, None
+    try:
+        if platform.system() == "Darwin":
+            cpu = subprocess.run(
+                ["sysctl", "-n", "machdep.cpu.brand_string"], capture_output=True, text=True, timeout=5
+            ).stdout.strip()
+            mem = int(
+                subprocess.run(["sysctl", "-n", "hw.memsize"], capture_output=True, text=True, timeout=5).stdout.strip()
+                or 0
+            )
+        elif platform.system() == "Linux":
+            with open("/proc/cpuinfo", encoding="utf-8") as fh:
+                for line in fh:
+                    if line.lower().startswith("model name"):
+                        cpu = line.split(":", 1)[1].strip()
+                        break
+            mem = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES")
+    except (OSError, ValueError, subprocess.SubprocessError):
+        pass
+    parts = [p for p in (cpu, f"{round(mem / 2**30)} GB" if mem else None) if p]
+    return ", ".join(parts) or None
+
+
 def host_info(docker_version: str | None) -> dict:
     return {
         "os": platform.system(),
         "arch": platform.machine(),
+        "hardware": hardware(),
         "python": platform.python_version(),
         "docker": docker_version,
     }
@@ -87,6 +116,7 @@ def run_matrix(
     log: Callable[[str], None] = print,
     progress: Callable[[dict], None] | None = None,
     checkpoint: Callable[[dict], None] | None = None,
+    logs_dir: Path | None = None,
     image: str = IMAGE,
     rebuild: bool = False,
 ) -> dict:
@@ -155,6 +185,12 @@ def run_matrix(
                         )
                         break
                 trial = run_trial(box, agent, skill.name, prompt, expect, rep, staged, cfg, skill_names)
+                raw = trial.pop("_raw")
+                if logs_dir is not None:
+                    logs_dir.mkdir(parents=True, exist_ok=True)
+                    name = f"{i:04d}-{agent.cfg.name}-{skill.name}-{expect}-r{rep}.jsonl"
+                    (logs_dir / name).write_text(raw, encoding="utf-8")
+                    trial["log"] = f"logs/{name}"
                 cost = run_cost(agent.provider, agent.cfg, trial.pop("_obs"))
                 trial["cost_usd"] = cost
                 max_seen[agent.cfg.name] = max(max_seen.get(agent.cfg.name, 0.0), cost)
@@ -216,4 +252,5 @@ def run_trial(
         "input_tokens": obs.input_tokens,
         "output_tokens": obs.output_tokens,
         "_obs": obs,
+        "_raw": out.stdout + (f"\n# stderr\n{out.stderr[-4000:]}" if out.stderr.strip() else ""),
     }

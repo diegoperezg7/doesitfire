@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="160" viewBox="0 0 880 160" role="img" aria-label="doesitfire">
+  <style>
+    .name { font: 700 56px Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; fill: #111116; letter-spacing: -1px; }
+    .tag { font: 400 20px Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; fill: #5c5d66; }
+    @media (prefers-color-scheme: dark) { .name { fill: #f4f5f8; } .tag { fill: #a3a4ae; } }
+  </style>
+  <g transform="translate(16 28) scale(4.333)">
+    <rect x="1" y="1" width="22" height="22" rx="6" fill="#a1319b"/>
+    <path d="M13.4 4.6 7.4 13.1h4.3l-1 6.3 6-8.6h-4.3z" fill="#fff" stroke="#fff" stroke-width="1.1" stroke-linejoin="round"/>
+  </g>
+  <text class="name" x="148" y="86">doesitfire</text>
+  <text class="tag" x="150" y="122">Does your SKILL.md actually fire?</text>
+</svg>

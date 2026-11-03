@@ -54,10 +54,10 @@ def print_matrix(results: dict, console: Console | None = None) -> dict:
             c = summary["cells"][f"{agent}|{skill}"]
             t = Text()
             t.append(f"fires {c['true_fires']}/{c['fire_runs']}", style=recall_color(c["recall"]))
-            t.append("  ")
+            t.append("\n")
             t.append(f"false {c['false_fires']}/{c['nofire_runs']}", style=false_color(c["false_fire_rate"]))
             if c["errors"]:
-                t.append(f"  err {c['errors']}", style="red")
+                t.append(f"\nerrors {c['errors']}", style="red")
             row.append(t)
         table.add_row(*row)
     table.add_section()
@@ -74,7 +74,7 @@ def print_matrix(results: dict, console: Console | None = None) -> dict:
     console.print(table)
     cost = results.get("cost_usd") or 0.0
     console.print(
-        f"[dim]{len(results['trials'])} runs, {results.get('repeats')} repeats per prompt, "
+        f"[dim]{len(results['trials'])} runs, {results.get('repeats')} repeat(s) per prompt, "
         f"{results.get('duration_s') or 0:.0f}s, cost {cost:.4f} USD[/dim]"
     )
     if any(a.get("experimental") for a in results["agents"]):

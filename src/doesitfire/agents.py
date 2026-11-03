@@ -44,7 +44,9 @@ class Observation:
             self.activated.append(skill)
 
 
-LOCAL_MAX_OUTPUT_TOKENS = 2048  # keeps small local models from writing essays after deciding
+# Local models only: thinking off and a output cap, the same for the three agents. A 4B model
+# thinking for thousands of tokens per call makes a 216-run matrix take a day on a laptop.
+LOCAL_MAX_OUTPUT_TOKENS = 4096
 
 
 class Agent:
@@ -139,6 +141,8 @@ class ClaudeCode(Agent):
             env["SLASH_COMMAND_TOOL_CHAR_BUDGET"] = "8000"
         if self.max_output_tokens:
             env["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = str(self.max_output_tokens)
+        if p.local:
+            env["CLAUDE_CODE_EXTRA_BODY"] = json.dumps({"thinking": {"type": "disabled"}})
         tools = "Skill,Read,Glob,Grep"
         argv = [
             "claude",
@@ -220,6 +224,8 @@ class Codex(Agent):
             "-m",
             self.cfg.model,
         ]
+        if p.local:
+            argv[-2:-2] = ["-c", 'model_reasoning_effort="none"']
         argv.append(prompt)
         return Invocation(argv, {"NO_COLOR": "1"}, secret, [base])
 
@@ -268,6 +274,8 @@ class OpenCode(Agent):
         model_cfg: dict = {"name": self.cfg.model}
         if self.max_output_tokens:
             model_cfg["limit"] = {"context": 16384, "output": self.max_output_tokens}
+        if p.local:
+            model_cfg["options"] = {"reasoningEffort": "none"}
         config = {
             "$schema": "https://opencode.ai/config.json",
             "autoupdate": False,

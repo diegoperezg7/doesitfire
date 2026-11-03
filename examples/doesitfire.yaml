@@ -2,7 +2,7 @@
 # 4 near misses that should not. This is the suite behind `doesitfire demo`.
 
 repeats: 3
-timeout: 300
+timeout: 900       # generous: a 4B model on a shared laptop queues requests
 max_turns: 2
 
 agents:
