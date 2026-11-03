@@ -1,0 +1,65 @@
+name: doesitfire
+description: Test whether your SKILL.md skills actually fire in Claude Code, Codex and OpenCode.
+author: Diego Pérez
+branding:
+  icon: zap
+  color: purple
+
+inputs:
+  config:
+    description: Path to doesitfire.yaml.
+    default: doesitfire.yaml
+  out:
+    description: Output directory for results.json, report.html, junit.xml and the badge.
+    default: doesitfire-results
+  agents:
+    description: Comma-separated subset of agents (default: all configured).
+    default: ""
+  repeats:
+    description: Runs per prompt and agent (default: the value in the config).
+    default: ""
+  max-cost:
+    description: Stop before spending more than this many USD.
+    default: "1.0"
+  min-recall:
+    description: Fail if any agent x skill recall is below this (0-1). Empty = never fail on recall.
+    default: ""
+  max-false-fire:
+    description: Fail if any agent x skill false-fire rate is above this (0-1). Empty = never fail on it.
+    default: ""
+  version:
+    description: doesitfire version (git tag) to run.
+    default: v0.1.0
+
+outputs:
+  results:
+    description: Path to results.json.
+    value: ${{ steps.run.outputs.results }}
+  report:
+    description: Path to report.html.
+    value: ${{ steps.run.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - uses: astral-sh/setup-uv@v10
+    - id: run
+      shell: bash
+      env:
+        DIF_CONFIG: ${{ inputs.config }}
+        DIF_OUT: ${{ inputs.out }}
+        DIF_AGENTS: ${{ inputs.agents }}
+        DIF_REPEATS: ${{ inputs.repeats }}
+        DIF_MAX_COST: ${{ inputs.max-cost }}
+        DIF_MIN_RECALL: ${{ inputs.min-recall }}
+        DIF_MAX_FALSE_FIRE: ${{ inputs.max-false-fire }}
+        DIF_VERSION: ${{ inputs.version }}
+      run: |
+        args=(run --config "$DIF_CONFIG" --out "$DIF_OUT" --max-cost "$DIF_MAX_COST" --no-open)
+        [ -n "$DIF_AGENTS" ] && args+=(--agents "$DIF_AGENTS")
+        [ -n "$DIF_REPEATS" ] && args+=(--repeats "$DIF_REPEATS")
+        [ -n "$DIF_MIN_RECALL" ] && args+=(--min-recall "$DIF_MIN_RECALL")
+        [ -n "$DIF_MAX_FALSE_FIRE" ] && args+=(--max-false-fire "$DIF_MAX_FALSE_FIRE")
+        echo "results=$DIF_OUT/results.json" >> "$GITHUB_OUTPUT"
+        echo "report=$DIF_OUT/report.html" >> "$GITHUB_OUTPUT"
+        uvx --from "git+https://github.com/diegoperezg7/doesitfire@${DIF_VERSION}" doesitfire "${args[@]}"

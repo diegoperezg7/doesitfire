@@ -1,0 +1,5 @@
+# doesitfire-qwen3:4b-16k: qwen3:4b with a 16k context window.
+# Agent CLIs send 6k-11k token prompts and Ollama defaults to a 4k context.
+# Create it with:  ollama pull qwen3:4b && ollama create doesitfire-qwen3:4b-16k -f ollama/Modelfile
+FROM qwen3:4b
+PARAMETER num_ctx 16384

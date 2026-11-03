@@ -1,0 +1,38 @@
+# Copy to .github/workflows/doesitfire.yml in a repo that ships skills.
+# Runs the activation matrix on every change to a skill and publishes the badge.
+name: skills fire
+
+on:
+  pull_request:
+    paths: [".claude/skills/**", ".agents/skills/**", "skills/**", "doesitfire.yaml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  doesitfire:
+    runs-on: ubuntu-latest  # needs Docker: Linux runners only
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: diegoperezg7/doesitfire@v0.1.0
+        with:
+          config: doesitfire.yaml
+          max-cost: "1.0"
+          min-recall: "0.75"
+          max-false-fire: "0.25"
+        env:
+          # Only the providers your doesitfire.yaml uses.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: doesitfire-results
+          path: doesitfire-results/
+      - uses: mikepenz/action-junit-report@v6
+        if: always()
+        with:
+          report_paths: doesitfire-results/junit.xml

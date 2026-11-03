@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>doesitfire report</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='1' y='1' width='22' height='22' rx='6' fill='%23a1319b'/%3E%3Cpath d='M13.4 4.6 7.4 13.1h4.3l-1 6.3 6-8.6h-4.3z' fill='%23fff' stroke='%23fff' stroke-width='1.1' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #ffffff; --surface: #ffffff; --sunken: #f6f6f9;
+  --fg: #111116; --muted: #5c5d66; --border: #e4e4e9;
+  --shadow: 0 1px 2px rgba(17,17,22,.05), 0 6px 20px rgba(17,17,22,.06);
+  --accent: #a1319b; --accent-soft: rgba(161,49,155,.10);
+  --ok: #11813c; --warn: #a45e00; --err: #c22826;
+  --track: #ececf1;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000; --surface: #0d0d10; --sunken: #0d0d10;
+    --fg: #f4f5f8; --muted: #a3a4ae; --border: #28282e;
+    --shadow: 0 0 0 1px rgba(255,255,255,.02), 0 10px 30px rgba(0,0,0,.7);
+    --accent: #df8cd8; --accent-soft: rgba(223,140,216,.12);
+    --ok: #5fd37f; --warn: #f7b83d; --err: #f66d67; --track: #1d1d22;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #000000; --surface: #0d0d10; --sunken: #0d0d10;
+  --fg: #f4f5f8; --muted: #a3a4ae; --border: #28282e;
+  --shadow: 0 0 0 1px rgba(255,255,255,.02), 0 10px 30px rgba(0,0,0,.7);
+  --accent: #df8cd8; --accent-soft: rgba(223,140,216,.12);
+  --ok: #5fd37f; --warn: #f7b83d; --err: #f66d67; --track: #1d1d22;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.55 var(--font-sans); }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 28px 16px 64px; }
+a { color: var(--accent); }
+code, .mono { font-family: var(--font-mono); font-size: .9em; }
+header.top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 12px; margin-right: auto; min-width: 0; }
+.brand svg { width: 40px; height: 40px; flex: none; }
+.brand h1 { font-size: 1.4rem; margin: 0; letter-spacing: -.01em; }
+.brand p { margin: 0; color: var(--muted); font-size: .875rem; }
+.controls { display: flex; gap: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { border: 0; background: transparent; color: var(--muted); font: 500 .8125rem var(--font-sans); padding: 6px 10px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+.seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.banner { overflow-wrap: anywhere; margin: 20px 0 0; padding: 10px 14px; border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; background: var(--surface); font-size: .875rem; color: var(--muted); }
+.banner strong { color: var(--fg); }
+.kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 20px 0 28px; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); padding: 14px 16px; min-width: 0; }
+.kpi .label { color: var(--muted); font-size: .8125rem; }
+.kpi .value { font: 600 1.6rem/1.2 var(--font-mono); margin-top: 4px; }
+.kpi .hint { color: var(--muted); font-size: .75rem; margin-top: 2px; }
+h2 { font-size: 1.1rem; margin: 32px 0 6px; }
+.lead { color: var(--muted); margin: 0 0 14px; font-size: .9rem; }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
+.matrix-wrap { overflow-x: auto; }
+table.matrix { width: 100%; border-collapse: collapse; min-width: 560px; }
+.matrix th, .matrix td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+.matrix tr:last-child td { border-bottom: 0; }
+.matrix thead th { font-size: .8125rem; color: var(--muted); font-weight: 500; }
+.matrix thead th b { display: block; color: var(--fg); font-weight: 600; font-size: .9rem; }
+.matrix tbody th { font-weight: 600; font-size: .9rem; white-space: nowrap; }
+.tag { display: inline-block; font-size: .6875rem; font-weight: 600; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--warn); color: var(--warn); margin-left: 4px; vertical-align: 1px; }
+.metric { display: grid; grid-template-columns: 78px 1fr auto; align-items: center; gap: 8px; font-size: .8125rem; }
+.metric + .metric { margin-top: 6px; }
+.metric .name { color: var(--muted); }
+.bar { height: 6px; border-radius: 3px; background: var(--track); overflow: hidden; }
+.bar i { display: block; height: 100%; border-radius: 3px; }
+.metric .num { font-family: var(--font-mono); font-size: .75rem; white-space: nowrap; }
+.c-ok { color: var(--ok); } .c-warn { color: var(--warn); } .c-err { color: var(--err); } .c-na { color: var(--muted); }
+.b-ok { background: var(--ok); } .b-warn { background: var(--warn); } .b-err { background: var(--err); } .b-na { background: transparent; }
+.errs { font-size: .75rem; color: var(--err); margin-top: 6px; }
+details.skill { margin-top: 12px; }
+details.skill > summary { cursor: pointer; padding: 14px 16px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 8px; }
+details.skill > summary::-webkit-details-marker { display: none; }
+details.skill > summary::after { content: "+"; color: var(--muted); font-weight: 400; }
+details.skill[open] > summary::after { content: "−"; }
+.desc { color: var(--muted); font-size: .85rem; padding: 0 16px 10px; margin: 0; }
+.prompts { width: 100%; border-collapse: collapse; }
+.prompts th, .prompts td { padding: 10px 16px; border-top: 1px solid var(--border); text-align: left; vertical-align: top; font-size: .85rem; }
+.prompts th { color: var(--muted); font-weight: 500; font-size: .75rem; }
+.prompts td.p { width: 100%; white-space: pre-wrap; word-break: break-word; }
+.prompts td.r { white-space: nowrap; font-family: var(--font-mono); font-size: .8rem; }
+.exp { display: inline-block; font-size: .6875rem; font-weight: 600; border-radius: 4px; padding: 1px 6px; margin-bottom: 4px; }
+.exp.fire { color: var(--accent); background: var(--accent-soft); }
+.exp.nofire { color: var(--muted); background: var(--sunken); border: 1px solid var(--border); }
+.other { display: block; color: var(--muted); font-size: .72rem; margin-top: 2px; }
+.notes { font-size: .85rem; color: var(--muted); padding: 14px 16px; }
+.notes p { margin: 0 0 8px; }
+footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
+@media (max-width: 760px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi.wide { grid-column: span 2; }
+  table.matrix, table.matrix thead, table.matrix tbody, table.matrix tr, table.matrix th, table.matrix td { display: block; min-width: 0; width: 100%; }
+  table.matrix thead { display: none; }
+  .matrix tbody tr { border-bottom: 1px solid var(--border); padding: 6px 0; }
+  .matrix tbody tr:last-child { border-bottom: 0; }
+  .matrix td, .matrix tbody th { border: 0; padding: 6px 16px; }
+  .matrix td::before { content: attr(data-agent); display: block; font-weight: 600; font-size: .8rem; margin-bottom: 4px; }
+  .prompts, .prompts tbody { display: block; }
+  .prompts thead { display: none; }
+  .prompts tr { display: grid; grid-template-columns: repeat(3, auto); gap: 4px 12px; padding: 10px 16px; border-top: 1px solid var(--border); }
+  .prompts td { border: 0; padding: 0; }
+  .prompts td.p { grid-column: 1 / -1; width: auto; }
+  .prompts td.r { white-space: normal; }
+  .prompts td.r::before { content: attr(data-agent) " "; color: var(--muted); font-family: var(--font-sans); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="6" fill="#a1319b"/><path d="M13.4 4.6 7.4 13.1h4.3l-1 6.3 6-8.6h-4.3z" fill="#fff" stroke="#fff" stroke-width="1.1" stroke-linejoin="round"/></svg>
+      <div><h1>doesitfire</h1><p data-i18n="subtitle">Skill activation report</p></div>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Language">
+        <button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button>
+      </div>
+      <div class="seg" role="group" aria-label="Theme">
+        <button type="button" data-theme-set="light" data-i18n="light">Light</button><button type="button" data-theme-set="dark" data-i18n="dark">Dark</button>
+      </div>
+    </div>
+  </header>
+  <div class="banner" id="banner"></div>
+  <section class="kpis" id="kpis"></section>
+  <h2 data-i18n="matrixTitle">Activation matrix</h2>
+  <p class="lead" data-i18n="matrixLead">For each skill and agent: how often the skill loaded on prompts that should trigger it (recall), and how often it loaded on prompts that should not (false fires).</p>
+  <div class="panel matrix-wrap"><table class="matrix" id="matrix"></table></div>
+  <h2 data-i18n="promptsTitle">Prompt by prompt</h2>
+  <p class="lead" data-i18n="promptsLead">Fired runs out of valid runs for every prompt. Runs that errored are left out and counted apart.</p>
+  <div id="skills"></div>
+  <h2 data-i18n="howTitle">How to read this</h2>
+  <div class="panel notes" id="notes"></div>
+  <footer id="footer"></footer>
+</div>
+<script type="application/json" id="data">__DOESITFIRE_DATA__</script>
+<script>
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("data").textContent);
+  var M = D.meta, S = D.summary;
+  var T = {
+    en: {
+      subtitle: "Skill activation report", light: "Light", dark: "Dark",
+      recorded: "Recorded result", live: "Run",
+      kRecall: "Recall", kRecallHint: "should-fire prompts that loaded the skill",
+      kFalse: "False fires", kFalseHint: "should-not prompts that loaded it",
+      kPrecision: "Precision", kPrecisionHint: "loads that were wanted",
+      kRuns: "Runs", kRunsHint: "sandboxed agent runs",
+      kCost: "Cost", kCostHint: "USD, from provider usage",
+      matrixTitle: "Activation matrix",
+      matrixLead: "For each skill and agent: how often the skill loaded on prompts that should trigger it (recall), and how often it loaded on prompts that should not (false fires).",
+      skill: "Skill", recall: "recall", falsef: "false fires", precision: "precision", errors: "errored runs",
+      total: "All skills",
+      promptsTitle: "Prompt by prompt",
+      promptsLead: "Fired runs out of valid runs for every prompt. Runs that errored are left out and counted apart.",
+      prompt: "Prompt", should: "should fire", shouldNot: "should not fire", alsoLoaded: "also loaded:",
+      experimental: "experimental",
+      howTitle: "How to read this",
+      notes: [
+        "<b>Recall</b>: share of runs on should-fire prompts where the agent loaded the skill. <b>False fires</b>: share of runs on should-not prompts where it loaded it anyway. <b>Precision</b>: of all loads, how many were wanted.",
+        "Each agent ran its real CLI headless in a Docker container with no network except the model API, side-effect tools denied and a cap of {turns} turns. Each prompt ran {repeats} times per agent because activation is not deterministic.",
+        "Detection: Claude Code, a <code>Skill</code> tool call in its stream-json output. OpenCode, its native <code>skill</code> tool. Codex reports no activation event, so a run counts when Codex reads the skill's <code>SKILL.md</code>; that is why it is marked experimental.",
+        "A small local model does not behave like a frontier model. These numbers describe this run, with these models; run <code>doesitfire run</code> with the models you actually use."
+      ],
+      footer: "Generated by doesitfire {version}. Started {start}, {dur} s.",
+      blocked: "Egress attempts blocked by the sandbox proxy: {n}."
+    },
+    es: {
+      subtitle: "Informe de activación de skills", light: "Claro", dark: "Oscuro",
+      recorded: "Resultado grabado", live: "Ejecución",
+      kRecall: "Recall", kRecallHint: "prompts que debían activarla y la activaron",
+      kFalse: "Falsos disparos", kFalseHint: "prompts que no debían y la activaron",
+      kPrecision: "Precisión", kPrecisionHint: "activaciones que tocaban",
+      kRuns: "Ejecuciones", kRunsHint: "ejecuciones de agente aisladas",
+      kCost: "Coste", kCostHint: "USD, según el uso del proveedor",
+      matrixTitle: "Matriz de activación",
+      matrixLead: "Para cada skill y agente: cuántas veces se cargó la skill con prompts que debían activarla (recall) y cuántas se cargó con prompts que no debían (falsos disparos).",
+      skill: "Skill", recall: "recall", falsef: "falsos", precision: "precisión", errors: "ejecuciones con error",
+      total: "Todas las skills",
+      promptsTitle: "Prompt a prompt",
+      promptsLead: "Ejecuciones con activación sobre ejecuciones válidas para cada prompt. Las que fallaron se excluyen y se cuentan aparte.",
+      prompt: "Prompt", should: "debe activar", shouldNot: "no debe activar", alsoLoaded: "también cargó:",
+      experimental: "experimental",
+      howTitle: "Cómo leerlo",
+      notes: [
+        "<b>Recall</b>: parte de las ejecuciones con prompts que debían activar la skill en las que el agente la cargó. <b>Falsos disparos</b>: parte de las ejecuciones con prompts que no debían en las que la cargó igualmente. <b>Precisión</b>: de todas las cargas, cuántas tocaban.",
+        "Cada agente ejecutó su CLI real sin interfaz dentro de un contenedor Docker, sin más red que la API del modelo, con las herramientas con efectos denegadas y un máximo de {turns} turnos. Cada prompt se ejecutó {repeats} veces por agente porque la activación no es determinista.",
+        "Detección: Claude Code, una llamada a la herramienta <code>Skill</code> en su salida stream-json. OpenCode, su herramienta nativa <code>skill</code>. Codex no emite un evento de activación, así que una ejecución cuenta cuando Codex lee el <code>SKILL.md</code> de la skill; por eso va marcado como experimental.",
+        "Un modelo local pequeño no se comporta como un modelo de frontera. Estas cifras describen esta ejecución con estos modelos; lanza <code>doesitfire run</code> con los modelos que uses de verdad."
+      ],
+      footer: "Generado por doesitfire {version}. Inicio {start}, {dur} s.",
+      blocked: "Intentos de salida bloqueados por el proxy del sandbox: {n}."
+    }
+  };
+  var lang = "en";
+  try { lang = localStorage.getItem("doesitfire-lang") || ""; } catch (e) { lang = ""; }
+  if (lang !== "en" && lang !== "es") lang = (navigator.language || "en").toLowerCase().indexOf("es") === 0 ? "es" : "en";
+
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]; }); }
+  function pct(v) { return v == null ? "n/a" : Math.round(v * 100) + "%"; }
+  function fmt(s, o) { return s.replace(/\{(\w+)\}/g, function (_, k) { return o[k] == null ? "" : o[k]; }); }
+  function rcls(v) { return v == null ? "na" : v >= 0.8 ? "ok" : v >= 0.5 ? "warn" : "err"; }
+  function fcls(v) { return v == null ? "na" : v <= 0.1 ? "ok" : v <= 0.3 ? "warn" : "err"; }
+  function agentInfo(name) { for (var i = 0; i < M.agents.length; i++) if (M.agents[i].name === name) return M.agents[i]; return {name: name}; }
+  function metric(label, v, num, cls) {
+    var w = v == null || v === 0 ? 0 : Math.max(2, Math.round(v * 100));
+    return '<div class="metric"><span class="name">' + esc(label) + '</span><span class="bar"><i class="b-' + cls + '" style="width:' + w + '%"></i></span><span class="num c-' + cls + '">' + esc(num) + '</span></div>';
+  }
+
+  function render() {
+    var t = T[lang];
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { var v = t[el.getAttribute("data-i18n")]; if (typeof v === "string") el.textContent = v; });
+    document.querySelectorAll("[data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang)); });
+
+    var models = M.agents.map(function (a) { return a.name + ": " + a.provider + "/" + a.model + " (CLI " + a.cli_version + ")"; }).join(" · ");
+    var hw = M.host && M.host.hardware ? " · " + M.host.hardware : "";
+    document.getElementById("banner").innerHTML = "<strong>" + esc(M.recorded ? t.recorded : t.live) + "</strong> · " +
+      esc((M.started_at || "").slice(0, 10)) + " · doesitfire " + esc(M.version) + " · " + esc(models) + esc(hw);
+
+    var o = D.overall;
+    var k = [
+      [t.kRecall, pct(o.recall), t.kRecallHint, "c-" + rcls(o.recall), ""],
+      [t.kFalse, pct(o.false_fire_rate), t.kFalseHint, "c-" + fcls(o.false_fire_rate), ""],
+      [t.kPrecision, pct(o.precision), t.kPrecisionHint, "c-" + rcls(o.precision), ""],
+      [t.kRuns, String(D.runs), t.kRunsHint, "", ""],
+      [t.kCost, "$" + (M.cost_usd || 0).toFixed(2), t.kCostHint, "", "wide"]
+    ];
+    document.getElementById("kpis").innerHTML = k.map(function (x) {
+      return '<div class="kpi ' + x[4] + '"><div class="label">' + esc(x[0]) + '</div><div class="value ' + x[3] + '">' + esc(x[1]) + '</div><div class="hint">' + esc(x[2]) + '</div></div>';
+    }).join("");
+
+    var head = "<thead><tr><th>" + esc(t.skill) + "</th>" + S.agents.map(function (a) {
+      var info = agentInfo(a);
+      return "<th><b>" + esc(a) + (info.experimental ? ' <span class="tag">' + esc(t.experimental) + "</span>" : "") + "</b>" + esc(info.model || "") + "</th>";
+    }).join("") + "</tr></thead>";
+    function cellHtml(c, a) {
+      var info = agentInfo(a);
+      return '<td data-agent="' + esc(a + (info.experimental ? " (" + t.experimental + ")" : "")) + '">' +
+        metric(t.recall, c.recall, c.true_fires + "/" + c.fire_runs, rcls(c.recall)) +
+        metric(t.falsef, c.false_fire_rate, c.false_fires + "/" + c.nofire_runs, fcls(c.false_fire_rate)) +
+        metric(t.precision, c.precision, pct(c.precision), rcls(c.precision)) +
+        (c.errors ? '<div class="errs">' + c.errors + " " + esc(t.errors) + "</div>" : "") + "</td>";
+    }
+    var rows = S.skills.map(function (s) {
+      return "<tr><th>" + esc(s) + "</th>" + S.agents.map(function (a) { return cellHtml(S.cells[a + "|" + s], a); }).join("") + "</tr>";
+    });
+    rows.push("<tr><th>" + esc(t.total) + "</th>" + S.agents.map(function (a) { return cellHtml(S.totals[a], a); }).join("") + "</tr>");
+    document.getElementById("matrix").innerHTML = head + "<tbody>" + rows.join("") + "</tbody>";
+
+    var descs = {};
+    (M.skills || []).forEach(function (s) { descs[s.name] = s.description; });
+    document.getElementById("skills").innerHTML = S.skills.map(function (s, idx) {
+      var byPrompt = {}, order = [];
+      S.agents.forEach(function (a) {
+        S.cells[a + "|" + s].prompts.forEach(function (p) {
+          var key = p.expect + "\u0000" + p.prompt;
+          if (!byPrompt[key]) { byPrompt[key] = {prompt: p.prompt, expect: p.expect, agents: {}}; order.push(key); }
+          byPrompt[key].agents[a] = p;
+        });
+      });
+      order.sort(function (x, y) { return byPrompt[x].expect === byPrompt[y].expect ? 0 : byPrompt[x].expect === "fire" ? -1 : 1; });
+      var body = order.map(function (key) {
+        var row = byPrompt[key];
+        var exp = row.expect === "fire" ? '<span class="exp fire">' + esc(t.should) + "</span>" : '<span class="exp nofire">' + esc(t.shouldNot) + "</span>";
+        return "<tr><td class=\"p\">" + exp + "<br>" + esc(row.prompt) + "</td>" + S.agents.map(function (a) {
+          var p = row.agents[a];
+          if (!p) return '<td class="r" data-agent="' + esc(a) + '">-</td>';
+          var rate = p.runs ? p.fired / p.runs : null;
+          var good = rate == null ? "na" : row.expect === "fire" ? rcls(rate) : fcls(rate);
+          var other = p.other && p.other.length ? '<span class="other">' + esc(t.alsoLoaded) + " " + esc(p.other.join(", ")) + "</span>" : "";
+          var errs = p.errors ? ' <span class="c-err">+' + p.errors + "err</span>" : "";
+          return '<td class="r" data-agent="' + esc(a) + '"><span class="c-' + good + '">' + p.fired + "/" + p.runs + "</span>" + errs + other + "</td>";
+        }).join("") + "</tr>";
+      }).join("");
+      return '<details class="panel skill"' + (idx === 0 ? " open" : "") + "><summary><span>" + esc(s) + "</span></summary>" +
+        '<p class="desc">' + esc(descs[s] || "") + "</p>" +
+        '<table class="prompts"><thead><tr><th>' + esc(t.prompt) + "</th>" + S.agents.map(function (a) { return "<th>" + esc(a) + "</th>"; }).join("") + "</tr></thead><tbody>" + body + "</tbody></table></details>";
+    }).join("");
+
+    var notes = t.notes.map(function (n) { return "<p>" + fmt(n, {turns: M.max_turns, repeats: M.repeats}) + "</p>"; });
+    if (M.blocked_egress && M.blocked_egress.length) notes.push("<p>" + esc(fmt(t.blocked, {n: M.blocked_egress.length})) + "</p>");
+    document.getElementById("notes").innerHTML = notes.join("");
+    document.getElementById("footer").innerHTML = esc(fmt(t.footer, {version: M.version, start: (M.started_at || "").replace("T", " ").slice(0, 16), dur: Math.round(M.duration_s || 0)})) +
+      ' · <a href="https://github.com/diegoperezg7/doesitfire">github.com/diegoperezg7/doesitfire</a>';
+  }
+
+  function applyTheme(theme) {
+    if (theme === "light" || theme === "dark") document.documentElement.setAttribute("data-theme", theme);
+    else document.documentElement.removeAttribute("data-theme");
+    var effective = theme || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.querySelectorAll("[data-theme-set]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-theme-set") === effective)); });
+  }
+  var theme = null;
+  try { theme = localStorage.getItem("doesitfire-theme"); } catch (e) { theme = null; }
+  var q = new URLSearchParams(location.search);
+  if (q.get("theme")) theme = q.get("theme");
+  if (q.get("lang") === "es" || q.get("lang") === "en") lang = q.get("lang");
+  applyTheme(theme);
+  document.querySelectorAll("[data-theme-set]").forEach(function (b) {
+    b.addEventListener("click", function () { theme = b.getAttribute("data-theme-set"); try { localStorage.setItem("doesitfire-theme", theme); } catch (e) {} applyTheme(theme); });
+  });
+  document.querySelectorAll("[data-lang]").forEach(function (b) {
+    b.addEventListener("click", function () { lang = b.getAttribute("data-lang"); try { localStorage.setItem("doesitfire-lang", lang); } catch (e) {} render(); });
+  });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { applyTheme(theme); });
+  render();
+})();
+</script>
+</body>
+</html>

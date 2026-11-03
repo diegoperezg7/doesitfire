@@ -1,0 +1,15 @@
+# Integration suite for the scripted mock model (tests/mockmodel.py).
+# The mock activates a skill when the prompt contains "fire:<skill-name>".
+repeats: 1
+timeout: 120
+agents:
+  claude-code: {provider: ollama, model: mock-model}
+  codex: {provider: ollama, model: mock-model}
+  opencode: {provider: ollama, model: mock-model}
+skills:
+  - path: ../../examples/skills/commit-message
+    should_fire: ["please fire:commit-message"]
+    should_not_fire: ["just say hello", "please fire:regex-explainer"]
+  - path: ../../examples/skills/regex-explainer
+    should_fire: ["please fire:regex-explainer"]
+    should_not_fire: ["just say hello"]
