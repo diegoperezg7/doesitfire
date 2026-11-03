@@ -89,7 +89,7 @@ details.skill[open] > summary::after { content: "−"; }
 .desc { color: var(--muted); font-size: .85rem; padding: 0 16px 10px; margin: 0; }
 .prompts { width: 100%; border-collapse: collapse; }
 .prompts th, .prompts td { padding: 10px 16px; border-top: 1px solid var(--border); text-align: left; vertical-align: top; font-size: .85rem; }
-.prompts th { color: var(--muted); font-weight: 500; font-size: .75rem; }
+.prompts th { color: var(--muted); font-weight: 500; font-size: .75rem; white-space: nowrap; }
 .prompts td.p { width: 100%; white-space: pre-wrap; word-break: break-word; }
 .prompts td.r { white-space: nowrap; font-family: var(--font-mono); font-size: .8rem; }
 .exp { display: inline-block; font-size: .6875rem; font-weight: 600; border-radius: 4px; padding: 1px 6px; margin-bottom: 4px; }
@@ -163,7 +163,7 @@ footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
       kCost: "Cost", kCostHint: "USD, from provider usage",
       matrixTitle: "Activation matrix",
       matrixLead: "For each skill and agent: how often the skill loaded on prompts that should trigger it (recall), and how often it loaded on prompts that should not (false fires).",
-      skill: "Skill", recall: "recall", falsef: "false fires", precision: "precision", errors: "errored runs",
+      skill: "Skill", recall: "recall", falsef: "false fires", precision: "precision", errors: "runs with errors",
       total: "All skills",
       promptsTitle: "Prompt by prompt",
       promptsLead: "Fired runs out of valid runs for every prompt. Runs that errored are left out and counted apart.",
@@ -254,7 +254,7 @@ footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
         metric(t.recall, c.recall, c.true_fires + "/" + c.fire_runs, rcls(c.recall)) +
         metric(t.falsef, c.false_fire_rate, c.false_fires + "/" + c.nofire_runs, fcls(c.false_fire_rate)) +
         metric(t.precision, c.precision, pct(c.precision), rcls(c.precision)) +
-        (c.errors ? '<div class="errs">' + c.errors + " " + esc(t.errors) + "</div>" : "") + "</td>";
+        (c.errors ? '<div class="errs">' + esc(t.errors) + ": " + c.errors + "</div>" : "") + "</td>";
     }
     var rows = S.skills.map(function (s) {
       return "<tr><th>" + esc(s) + "</th>" + S.agents.map(function (a) { return cellHtml(S.cells[a + "|" + s], a); }).join("") + "</tr>";
