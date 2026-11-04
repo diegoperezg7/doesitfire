@@ -1,4 +1,4 @@
-name: doesitfire
+name: doesitfire skill activation test
 description: Test whether your SKILL.md skills actually fire in Claude Code, Codex and OpenCode.
 author: Diego Pérez
 branding:
