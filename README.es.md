@@ -40,7 +40,7 @@ La demo no necesita API key, ni Docker, ni modelo. Muestra una ejecución real *
 skills de ejemplo de [`examples/`](examples):
 
 ```bash
-uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.0 doesitfire demo
+uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.1 doesitfire demo
 ```
 
 o desde un clon:
@@ -93,9 +93,9 @@ Necesitas Docker y Ollama (gratis, local) o una API key.
 
 ```bash
 cd tu-repo                        # con skills en .claude/skills, .agents/skills, skills/, ...
-uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.0 doesitfire init
+uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.1 doesitfire init
 # edita doesitfire.yaml: 4 o más prompts que deben cargar cada skill y 4 o más casi-aciertos que no
-uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.0 doesitfire run
+uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.1 doesitfire run
 ```
 
 `run` construye la imagen de los agentes la primera vez (unos 1,9 GB, unos minutos), imprime la matriz y escribe
@@ -209,7 +209,7 @@ cumple; es lo que quieres en CI. Si se alcanza el presupuesto sale con código 3
 Solo en runners Linux (los agentes corren en Docker; los runners alojados de macOS no traen Docker):
 
 ```yaml
-- uses: diegoperezg7/doesitfire@v0.1.0
+- uses: diegoperezg7/doesitfire@v0.1.1
   with:
     config: doesitfire.yaml
     max-cost: "1.0"

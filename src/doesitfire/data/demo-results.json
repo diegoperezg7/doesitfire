@@ -29,7 +29,13 @@
       "provider": "mistral",
       "model": "ministral-8b-latest",
       "experimental": false,
-      "repeats": 3
+      "repeats": 3,
+      "price": {
+        "input": 0.15,
+        "output": 0.15,
+        "source": "https://docs.mistral.ai/models/ministral-3-8b-25-12",
+        "checked": "2026-11-04"
+      }
     }
   ],
   "skills": [
@@ -244,7 +250,7 @@
       "input_tokens": 4983,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r0-e409dfa5.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -261,7 +267,7 @@
       "input_tokens": 4980,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r0-f2fb5411.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -278,7 +284,7 @@
       "input_tokens": 4982,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r0-6d69a44f.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -295,7 +301,7 @@
       "input_tokens": 4986,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r0-edbcb326.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -310,7 +316,7 @@
       "input_tokens": 4975,
       "output_tokens": 8,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r0-d98b2514.jsonl",
-      "cost_usd": 0.000498
+      "cost_usd": 0.000747
     },
     {
       "agent": "opencode",
@@ -325,7 +331,7 @@
       "input_tokens": 4975,
       "output_tokens": 131,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r0-9080e467.jsonl",
-      "cost_usd": 0.000511
+      "cost_usd": 0.000766
     },
     {
       "agent": "opencode",
@@ -342,7 +348,7 @@
       "input_tokens": 4981,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r0-5212ab0a.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -357,7 +363,7 @@
       "input_tokens": 4977,
       "output_tokens": 37,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r0-fa668f55.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000752
     },
     {
       "agent": "opencode",
@@ -374,7 +380,7 @@
       "input_tokens": 4990,
       "output_tokens": 13,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r0-acdcfc02.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -391,7 +397,7 @@
       "input_tokens": 4990,
       "output_tokens": 13,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r0-ec2fff5e.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -406,7 +412,7 @@
       "input_tokens": 4990,
       "output_tokens": 16,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r0-b575a6ef.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000751
     },
     {
       "agent": "opencode",
@@ -421,7 +427,7 @@
       "input_tokens": 4989,
       "output_tokens": 21,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r0-d87944e8.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000752
     },
     {
       "agent": "opencode",
@@ -436,7 +442,7 @@
       "input_tokens": 4976,
       "output_tokens": 37,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r0-7071a2c0.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000752
     },
     {
       "agent": "opencode",
@@ -451,7 +457,7 @@
       "input_tokens": 4979,
       "output_tokens": 102,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r0-b75ba907.jsonl",
-      "cost_usd": 0.000508
+      "cost_usd": 0.000762
     },
     {
       "agent": "opencode",
@@ -466,7 +472,7 @@
       "input_tokens": 4980,
       "output_tokens": 60,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r0-be76a2dc.jsonl",
-      "cost_usd": 0.000504
+      "cost_usd": 0.000756
     },
     {
       "agent": "opencode",
@@ -481,7 +487,7 @@
       "input_tokens": 4975,
       "output_tokens": 5,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r0-95c9e10d.jsonl",
-      "cost_usd": 0.000498
+      "cost_usd": 0.000747
     },
     {
       "agent": "opencode",
@@ -498,7 +504,7 @@
       "input_tokens": 5009,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r0-00fe9152.jsonl",
-      "cost_usd": 0.000502
+      "cost_usd": 0.000753
     },
     {
       "agent": "opencode",
@@ -515,7 +521,7 @@
       "input_tokens": 5013,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r0-4420d371.jsonl",
-      "cost_usd": 0.000503
+      "cost_usd": 0.000754
     },
     {
       "agent": "opencode",
@@ -532,7 +538,7 @@
       "input_tokens": 5007,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r0-e38f97a6.jsonl",
-      "cost_usd": 0.000502
+      "cost_usd": 0.000753
     },
     {
       "agent": "opencode",
@@ -549,7 +555,7 @@
       "input_tokens": 5010,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r0-39ed1761.jsonl",
-      "cost_usd": 0.000502
+      "cost_usd": 0.000753
     },
     {
       "agent": "opencode",
@@ -564,7 +570,7 @@
       "input_tokens": 4980,
       "output_tokens": 8,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r0-fd36fd0d.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000748
     },
     {
       "agent": "opencode",
@@ -579,7 +585,7 @@
       "input_tokens": 4983,
       "output_tokens": 25,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r0-1f198403.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000751
     },
     {
       "agent": "opencode",
@@ -594,7 +600,7 @@
       "input_tokens": 4983,
       "output_tokens": 97,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r0-db1d220c.jsonl",
-      "cost_usd": 0.000508
+      "cost_usd": 0.000762
     },
     {
       "agent": "opencode",
@@ -609,7 +615,7 @@
       "input_tokens": 4988,
       "output_tokens": 15,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r0-3284c6af.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -626,7 +632,7 @@
       "input_tokens": 4982,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r1-e409dfa5.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -643,7 +649,7 @@
       "input_tokens": 4980,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r1-f2fb5411.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -660,7 +666,7 @@
       "input_tokens": 4982,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r1-6d69a44f.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -677,7 +683,7 @@
       "input_tokens": 4986,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r1-edbcb326.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -692,7 +698,7 @@
       "input_tokens": 4975,
       "output_tokens": 8,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r1-d98b2514.jsonl",
-      "cost_usd": 0.000498
+      "cost_usd": 0.000747
     },
     {
       "agent": "opencode",
@@ -707,7 +713,7 @@
       "input_tokens": 4975,
       "output_tokens": 97,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r1-9080e467.jsonl",
-      "cost_usd": 0.000507
+      "cost_usd": 0.000761
     },
     {
       "agent": "opencode",
@@ -724,7 +730,7 @@
       "input_tokens": 4981,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r1-5212ab0a.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -739,7 +745,7 @@
       "input_tokens": 4977,
       "output_tokens": 37,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r1-fa668f55.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000752
     },
     {
       "agent": "opencode",
@@ -756,7 +762,7 @@
       "input_tokens": 4989,
       "output_tokens": 13,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r1-acdcfc02.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -773,7 +779,7 @@
       "input_tokens": 4990,
       "output_tokens": 13,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r1-ec2fff5e.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -788,7 +794,7 @@
       "input_tokens": 4990,
       "output_tokens": 16,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r1-b575a6ef.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000751
     },
     {
       "agent": "opencode",
@@ -803,7 +809,7 @@
       "input_tokens": 4989,
       "output_tokens": 10,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r1-d87944e8.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -818,7 +824,7 @@
       "input_tokens": 4976,
       "output_tokens": 33,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r1-7071a2c0.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000751
     },
     {
       "agent": "opencode",
@@ -833,7 +839,7 @@
       "input_tokens": 4979,
       "output_tokens": 102,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r1-b75ba907.jsonl",
-      "cost_usd": 0.000508
+      "cost_usd": 0.000762
     },
     {
       "agent": "opencode",
@@ -848,7 +854,7 @@
       "input_tokens": 4980,
       "output_tokens": 60,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r1-be76a2dc.jsonl",
-      "cost_usd": 0.000504
+      "cost_usd": 0.000756
     },
     {
       "agent": "opencode",
@@ -863,7 +869,7 @@
       "input_tokens": 4975,
       "output_tokens": 6,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r1-95c9e10d.jsonl",
-      "cost_usd": 0.000498
+      "cost_usd": 0.000747
     },
     {
       "agent": "opencode",
@@ -880,7 +886,7 @@
       "input_tokens": 5008,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r1-00fe9152.jsonl",
-      "cost_usd": 0.000502
+      "cost_usd": 0.000753
     },
     {
       "agent": "opencode",
@@ -897,7 +903,7 @@
       "input_tokens": 5013,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r1-4420d371.jsonl",
-      "cost_usd": 0.000503
+      "cost_usd": 0.000754
     },
     {
       "agent": "opencode",
@@ -914,7 +920,7 @@
       "input_tokens": 5007,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r1-e38f97a6.jsonl",
-      "cost_usd": 0.000502
+      "cost_usd": 0.000753
     },
     {
       "agent": "opencode",
@@ -931,7 +937,7 @@
       "input_tokens": 5010,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r1-39ed1761.jsonl",
-      "cost_usd": 0.000502
+      "cost_usd": 0.000753
     },
     {
       "agent": "opencode",
@@ -946,7 +952,7 @@
       "input_tokens": 4980,
       "output_tokens": 3,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r1-fd36fd0d.jsonl",
-      "cost_usd": 0.000498
+      "cost_usd": 0.000747
     },
     {
       "agent": "opencode",
@@ -961,7 +967,7 @@
       "input_tokens": 4983,
       "output_tokens": 25,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r1-1f198403.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000751
     },
     {
       "agent": "opencode",
@@ -976,7 +982,7 @@
       "input_tokens": 4983,
       "output_tokens": 99,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r1-db1d220c.jsonl",
-      "cost_usd": 0.000508
+      "cost_usd": 0.000762
     },
     {
       "agent": "opencode",
@@ -991,7 +997,7 @@
       "input_tokens": 4988,
       "output_tokens": 15,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r1-3284c6af.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -1008,7 +1014,7 @@
       "input_tokens": 4982,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r2-e409dfa5.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -1025,7 +1031,7 @@
       "input_tokens": 4980,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r2-f2fb5411.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -1042,7 +1048,7 @@
       "input_tokens": 4982,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r2-6d69a44f.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -1059,7 +1065,7 @@
       "input_tokens": 4986,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-fire-r2-edbcb326.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -1074,7 +1080,7 @@
       "input_tokens": 4975,
       "output_tokens": 13,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r2-d98b2514.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000748
     },
     {
       "agent": "opencode",
@@ -1089,7 +1095,7 @@
       "input_tokens": 4975,
       "output_tokens": 141,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r2-9080e467.jsonl",
-      "cost_usd": 0.000512
+      "cost_usd": 0.000767
     },
     {
       "agent": "opencode",
@@ -1106,7 +1112,7 @@
       "input_tokens": 4981,
       "output_tokens": 11,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r2-5212ab0a.jsonl",
-      "cost_usd": 0.000499
+      "cost_usd": 0.000749
     },
     {
       "agent": "opencode",
@@ -1121,7 +1127,7 @@
       "input_tokens": 4977,
       "output_tokens": 27,
       "log": "examples/recorded/logs/opencode-commit-message-no_fire-r2-fa668f55.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.000751
     },
     {
       "agent": "opencode",
@@ -1138,7 +1144,7 @@
       "input_tokens": 4989,
       "output_tokens": 13,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r2-acdcfc02.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -1155,7 +1161,7 @@
       "input_tokens": 4990,
       "output_tokens": 13,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r2-ec2fff5e.jsonl",
-      "cost_usd": 0.0005
+      "cost_usd": 0.00075
     },
     {
       "agent": "opencode",
@@ -1170,7 +1176,7 @@
       "input_tokens": 4990,
       "output_tokens": 16,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r2-b575a6ef.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000751
     },
     {
       "agent": "opencode",
@@ -1185,7 +1191,7 @@
       "input_tokens": 4989,
       "output_tokens": 82,
       "log": "examples/recorded/logs/opencode-regex-explainer-fire-r2-d87944e8.jsonl",
-      "cost_usd": 0.000507
+      "cost_usd": 0.000761
     },
     {
       "agent": "opencode",
@@ -1200,7 +1206,7 @@
       "input_tokens": 4976,
       "output_tokens": 61,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r2-7071a2c0.jsonl",
-      "cost_usd": 0.000504
+      "cost_usd": 0.000756
     },
     {
       "agent": "opencode",
@@ -1215,7 +1221,7 @@
       "input_tokens": 4979,
       "output_tokens": 148,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r2-b75ba907.jsonl",
-      "cost_usd": 0.000513
+      "cost_usd": 0.000769
     },
     {
       "agent": "opencode",
@@ -1230,7 +1236,7 @@
       "input_tokens": 4980,
       "output_tokens": 60,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r2-be76a2dc.jsonl",
-      "cost_usd": 0.000504
+      "cost_usd": 0.000756
     },
     {
       "agent": "opencode",
@@ -1245,7 +1251,7 @@
       "input_tokens": 4975,
       "output_tokens": 5,
       "log": "examples/recorded/logs/opencode-regex-explainer-no_fire-r2-95c9e10d.jsonl",
-      "cost_usd": 0.000498
+      "cost_usd": 0.000747
     },
     {
       "agent": "opencode",
@@ -1262,7 +1268,7 @@
       "input_tokens": 5008,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r2-00fe9152.jsonl",
-      "cost_usd": 0.000502
+      "cost_usd": 0.000753
     },
     {
       "agent": "opencode",
@@ -1279,7 +1285,7 @@
       "input_tokens": 5013,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r2-4420d371.jsonl",
-      "cost_usd": 0.000503
+      "cost_usd": 0.000754
     },
     {
       "agent": "opencode",
@@ -1296,7 +1302,7 @@
       "input_tokens": 5007,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r2-e38f97a6.jsonl",
-      "cost_usd": 0.000502
+      "cost_usd": 0.000753
     },
     {
       "agent": "opencode",
@@ -1313,7 +1319,7 @@
       "input_tokens": 5010,
       "output_tokens": 12,
       "log": "examples/recorded/logs/opencode-dockerfile-review-fire-r2-39ed1761.jsonl",
-      "cost_usd": 0.000502
+      "cost_usd": 0.000753
     },
     {
       "agent": "opencode",
@@ -1328,7 +1334,7 @@
       "input_tokens": 4980,
       "output_tokens": 3,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r2-fd36fd0d.jsonl",
-      "cost_usd": 0.000498
+      "cost_usd": 0.000747
     },
     {
       "agent": "opencode",
@@ -1343,7 +1349,7 @@
       "input_tokens": 4983,
       "output_tokens": 25,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r2-1f198403.jsonl",
-      "cost_usd": 0.000501
+      "cost_usd": 0.000751
     },
     {
       "agent": "opencode",
@@ -1358,7 +1364,7 @@
       "input_tokens": 4983,
       "output_tokens": 100,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r2-db1d220c.jsonl",
-      "cost_usd": 0.000508
+      "cost_usd": 0.000762
     },
     {
       "agent": "opencode",
@@ -1373,10 +1379,10 @@
       "input_tokens": 4988,
       "output_tokens": 312,
       "log": "examples/recorded/logs/opencode-dockerfile-review-no_fire-r2-3284c6af.jsonl",
-      "cost_usd": 0.00053
+      "cost_usd": 0.000795
     }
   ],
-  "cost_usd": 0.036146,
+  "cost_usd": 0.054221,
   "partial": false,
   "stop_reason": null,
   "sessions": 9,

@@ -146,6 +146,11 @@ def run_matrix(
                 "provider": a.provider.name,
                 "model": a.cfg.model,
                 "experimental": a.cfg.name in EXPERIMENTAL,
+                "price": (
+                    {"input": a.cfg.price_input, "output": a.cfg.price_output}
+                    if a.cfg.price_input is not None
+                    else None
+                ),
             }
             for a in agents
         ],

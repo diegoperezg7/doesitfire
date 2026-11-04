@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
-      - uses: diegoperezg7/doesitfire@v0.1.0
+      - uses: diegoperezg7/doesitfire@v0.1.1
         with:
           config: doesitfire.yaml
           max-cost: "1.0"

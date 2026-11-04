@@ -40,7 +40,7 @@ The demo needs no API key, no Docker and no model. It shows a **recorded** real 
 example skills in [`examples/`](examples):
 
 ```bash
-uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.0 doesitfire demo
+uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.1 doesitfire demo
 ```
 
 or from a clone:
@@ -92,9 +92,9 @@ You need Docker and either Ollama (free, local) or an API key.
 
 ```bash
 cd your-repo                      # with skills in .claude/skills, .agents/skills, skills/, ...
-uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.0 doesitfire init
+uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.1 doesitfire init
 # edit doesitfire.yaml: 4+ prompts that should load each skill, 4+ near misses that should not
-uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.0 doesitfire run
+uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.1 doesitfire run
 ```
 
 `run` builds the agent image on first use (about 1.9 GB, a few minutes), then prints the matrix and writes
@@ -208,7 +208,7 @@ what you want in CI. Budget stops exit 3 and keep the partial results.
 Linux runners only (the agents run in Docker; hosted macOS runners have no Docker):
 
 ```yaml
-- uses: diegoperezg7/doesitfire@v0.1.0
+- uses: diegoperezg7/doesitfire@v0.1.1
   with:
     config: doesitfire.yaml
     max-cost: "1.0"

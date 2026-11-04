@@ -9,7 +9,9 @@ max_turns: 2
 agents:
   claude-code: false
   codex: false
-  opencode: {provider: mistral, model: ministral-8b-latest, price: {input: 0.10, output: 0.10}}
+  # ministral-8b-latest = ministral-8b-2512: 0.15 USD per 1M tokens in and out
+  # (https://docs.mistral.ai/models/ministral-3-8b-25-12, checked 2026-11-04)
+  opencode: {provider: mistral, model: ministral-8b-latest, price: {input: 0.15, output: 0.15}}
 
 skills:
   - path: skills/commit-message
