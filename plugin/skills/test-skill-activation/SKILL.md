@@ -11,8 +11,8 @@ each skill, and reports recall (fires when it should) and false-fire rate per ag
 ## Before anything runs
 
 1. Check the tools: `uv --version` and `docker info` must work. If Docker is not running, say so and stop.
-2. Use this command prefix everywhere (until doesitfire is on PyPI):
-   `uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.2 doesitfire`
+2. Use this command prefix everywhere, pinned to a release:
+   `uvx --from doesitfire==0.1.2 doesitfire`
 3. To show the user what a result looks like first, with no keys, no Docker and no cost, run `... doesitfire demo`.
 
 ## Steps

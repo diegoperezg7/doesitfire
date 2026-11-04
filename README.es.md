@@ -40,7 +40,7 @@ La demo no necesita API key, ni Docker, ni modelo. Muestra una ejecución real *
 skills de ejemplo de [`examples/`](examples):
 
 ```bash
-uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.2 doesitfire demo
+uvx doesitfire demo
 ```
 
 o desde un clon:
@@ -48,8 +48,6 @@ o desde un clon:
 ```bash
 git clone https://github.com/diegoperezg7/doesitfire && cd doesitfire && uv run doesitfire demo
 ```
-
-`uvx doesitfire` llegará pronto a PyPI.
 
 ## Ejemplo de salida
 
@@ -93,9 +91,9 @@ Necesitas Docker y Ollama (gratis, local) o una API key.
 
 ```bash
 cd tu-repo                        # con skills en .claude/skills, .agents/skills, skills/, ...
-uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.2 doesitfire init
+uvx doesitfire init
 # edita doesitfire.yaml: 4 o más prompts que deben cargar cada skill y 4 o más casi-aciertos que no
-uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.2 doesitfire run
+uvx doesitfire run
 ```
 
 `run` construye la imagen de los agentes la primera vez (unos 1,9 GB, unos minutos), imprime la matriz y escribe
