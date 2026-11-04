@@ -29,7 +29,7 @@ inputs:
     default: ""
   version:
     description: doesitfire version (git tag) to run.
-    default: v0.1.1
+    default: v0.1.2
 
 outputs:
   results:
