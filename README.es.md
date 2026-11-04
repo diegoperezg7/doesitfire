@@ -247,6 +247,16 @@ Hay una rareza de Ollama que se resuelve sola: la Responses API de Ollama descar
 es donde Codex lista las skills disponibles. Solo para Codex con Ollama, el proxy de salida los reescribe a `system`
 (HTTP plano hacia tu Ollama local; el tráfico HTTPS hacia APIs de pago pasa por el túnel sin tocarse).
 
+## Úsalo desde Claude Code
+
+Instala el plugin y pídeselo a Claude con tus palabras; su skill `test-skill-activation` encuentra tus skills, escribe prompts que deberían activarlas y otros que no, acuerda contigo el presupuesto, ejecuta doesitfire y reescribe la descripción de las que fallan, y vuelve a medirlas para comprobarlo.
+
+```text
+/plugin install doesitfire --marketplace diegoperezg7/doesitfire
+```
+
+La skill indica a Claude que pregunte antes de cualquier ejecución de pago, y `--max-cost` sigue limitando el gasto.
+
 ## Hoja de ruta
 
 - Cursor, Gemini CLI y GitHub Copilot CLI.

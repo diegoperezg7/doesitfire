@@ -1,0 +1,11 @@
+{
+  "name": "doesitfire",
+  "owner": { "name": "Diego Pérez", "url": "https://github.com/diegoperezg7" },
+  "plugins": [
+    {
+      "name": "doesitfire",
+      "source": "./plugin",
+      "description": "Test whether your agent skills (SKILL.md) actually fire in Claude Code, Codex and OpenCode, and tune the descriptions of the ones that do not."
+    }
+  ]
+}

@@ -245,6 +245,16 @@ One Ollama quirk is handled for you: Ollama's Responses API drops input messages
 Codex lists the available skills. For Codex on Ollama only, the egress proxy rewrites them to `system` (plain HTTP
 to your local Ollama; HTTPS traffic to paid APIs is tunnelled untouched).
 
+## Use it from Claude Code
+
+Install the plugin and ask Claude in plain words; its `test-skill-activation` skill finds your skills, writes prompts that should and should not trigger each one, agrees the budget with you, runs doesitfire and rewrites the descriptions of skills that miss, then re-runs them to check.
+
+```text
+/plugin install doesitfire --marketplace diegoperezg7/doesitfire
+```
+
+The skill tells Claude to ask before any paid run, and `--max-cost` still caps the spend.
+
 ## Roadmap
 
 - Cursor, Gemini CLI and GitHub Copilot CLI.
