@@ -12,7 +12,7 @@ per agent and skill. For skills that miss, it proposes a new description and mea
 
 ## What it runs and sends
 
-- It runs `uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.1 doesitfire`, pinned to a
+- It runs `uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.2 doesitfire`, pinned to a
   release tag. The CLI runs each agent inside a Docker container with CPU, memory and time limits.
 - The prompts and your skills go only to the model provider you choose for each agent (Anthropic,
   OpenAI, OpenRouter, Mistral or a local Ollama). Keys are read from environment variables and are never

@@ -1,6 +1,6 @@
 {
   "name": "doesitfire",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Test whether your agent skills (SKILL.md) actually fire in Claude Code, Codex and OpenCode, and tune the descriptions of the ones that do not.",
   "author": { "name": "Diego Pérez", "url": "https://github.com/diegoperezg7" },
   "homepage": "https://github.com/diegoperezg7/doesitfire",

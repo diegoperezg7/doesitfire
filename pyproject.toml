@@ -1,6 +1,6 @@
 [project]
 name = "doesitfire"
-version = "0.1.1"
+version = "0.1.2"
 description = "Does your SKILL.md actually fire? Test skill activation in Claude Code, Codex and OpenCode with one command."
 readme = "README.md"
 license = "MIT"

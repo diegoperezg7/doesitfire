@@ -12,7 +12,7 @@ each skill, and reports recall (fires when it should) and false-fire rate per ag
 
 1. Check the tools: `uv --version` and `docker info` must work. If Docker is not running, say so and stop.
 2. Use this command prefix everywhere (until doesitfire is on PyPI):
-   `uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.1 doesitfire`
+   `uvx --from git+https://github.com/diegoperezg7/doesitfire@v0.1.2 doesitfire`
 3. To show the user what a result looks like first, with no keys, no Docker and no cost, run `... doesitfire demo`.
 
 ## Steps
@@ -42,4 +42,4 @@ each skill, and reports recall (fires when it should) and false-fire rate per ag
 - Activation is not deterministic: with `repeats: 1` a single run decides the cell. Prefer 3 when the
   budget allows and say how many runs each number rests on.
 - For CI, `--min-recall 0.75 --max-false-fire 0.25` makes the run exit 1 when a cell misses, and the
-  repository ships a GitHub Action (`uses: diegoperezg7/doesitfire@v0.1.1`).
+  repository ships a GitHub Action (`uses: diegoperezg7/doesitfire@v0.1.2`).

@@ -4,7 +4,7 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.1.2] - 2026-11-04
 
 ### Added
 - Claude Code plugin (`/plugin install doesitfire --marketplace diegoperezg7/doesitfire`) with the `test-skill-activation` skill.
@@ -43,5 +43,6 @@ All notable changes to this project are documented here. The format follows
 - `doesitfire demo` shows a recorded real run of three example skills.
 - Composite GitHub Action and an example workflow.
 
+[0.1.2]: https://github.com/diegoperezg7/doesitfire/releases/tag/v0.1.2
 [0.1.1]: https://github.com/diegoperezg7/doesitfire/releases/tag/v0.1.1
 [0.1.0]: https://github.com/diegoperezg7/doesitfire/releases/tag/v0.1.0
