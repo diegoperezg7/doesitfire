@@ -77,6 +77,12 @@ Los eventos JSON en bruto de cada ejecución están en [`examples/recorded/logs/
 <p align="center"><img src="docs/assets/report-light.png" alt="HTML report" width="820"></p>
 <!-- results:end -->
 
+La suite está en [`examples/doesitfire.yaml`](examples/doesitfire.yaml) (todos los agentes con Ollama) y
+[`examples/doesitfire.mistral.yaml`](examples/doesitfire.mistral.yaml) (OpenCode con Mistral). Las ejecuciones de OpenCode con
+error son respuestas HTTP 400 de Mistral: cuando el modelo llama a una herramienta que doesitfire deniega (por ejemplo
+`WebFetch`), la siguiente petición de OpenCode termina con un mensaje de assistant y Mistral la rechaza. Se excluyen de las
+tasas; no cuentan como "no se activó".
+
 ## Prueba tus propias skills
 
 Necesitas Docker y Ollama (gratis, local) o una API key.

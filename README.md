@@ -77,6 +77,11 @@ The raw JSON events of every run are in [`examples/recorded/logs/`](examples/rec
 <p align="center"><img src="docs/assets/report-light.png" alt="HTML report" width="820"></p>
 <!-- results:end -->
 
+The suite is [`examples/doesitfire.yaml`](examples/doesitfire.yaml) (all agents on Ollama) and
+[`examples/doesitfire.mistral.yaml`](examples/doesitfire.mistral.yaml) (OpenCode on Mistral). OpenCode's errored runs are
+HTTP 400s from Mistral: when the model calls a tool that doesitfire denies (for example `WebFetch`), OpenCode's next
+request ends with an assistant message, which Mistral rejects. They are excluded from the rates, not counted as "did not fire".
+
 ## Test your own skills
 
 You need Docker and either Ollama (free, local) or an API key.

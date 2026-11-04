@@ -1,3 +1,4 @@
+# OpenCode on Mistral (OpenAI-compatible), as in the recorded demo. Needs MISTRAL_API_KEY.
 # Example suite: three small skills, 4 prompts that should load each one and
 # 4 near misses that should not. This is the suite behind `doesitfire demo`.
 
