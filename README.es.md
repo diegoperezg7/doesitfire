@@ -255,6 +255,16 @@ es donde Codex lista las skills disponibles. Solo para Codex con Ollama, el prox
 - Conflictos entre skills (dos skills que compiten por el mismo prompt).
 - Publicación en GitHub Marketplace.
 
+## Parte de una serie
+
+Herramientas open source para medir agentes y LLMs con tus propios datos:
+
+- [memarena](https://github.com/diegoperezg7/memarena): Compara capas de memoria con tus propias conversaciones.
+- [parsearena](https://github.com/diegoperezg7/parsearena): Compara parsers de PDF lado a lado y su efecto en la recuperación.
+- [commitarena](https://github.com/diegoperezg7/commitarena): Reproduce fixes reales de tu historial de git con cualquier modelo.
+- [toolbloat](https://github.com/diegoperezg7/toolbloat): Mide el coste en tokens de tu pila MCP y los errores al elegir tool.
+- [rulelab](https://github.com/diegoperezg7/rulelab): Descubre qué reglas de tu AGENTS.md se ganan sus tokens.
+
 ## Licencia
 
 [MIT](LICENSE). Las tres skills de ejemplo de `examples/skills` también son MIT y se escribieron para este proyecto.

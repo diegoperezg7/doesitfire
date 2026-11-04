@@ -253,6 +253,16 @@ to your local Ollama; HTTPS traffic to paid APIs is tunnelled untouched).
 - Conflicts between skills (two skills competing for the same prompt).
 - GitHub Marketplace listing.
 
+## Part of a series
+
+Open source tools that evaluate agents and LLMs on your own data:
+
+- [memarena](https://github.com/diegoperezg7/memarena): Benchmark memory layers on your own conversations.
+- [parsearena](https://github.com/diegoperezg7/parsearena): Compare PDF parsers side by side and their effect on retrieval.
+- [commitarena](https://github.com/diegoperezg7/commitarena): Replay real bug fixes from your git history against any model.
+- [toolbloat](https://github.com/diegoperezg7/toolbloat): Measure the token cost of your MCP stack and tool-choice errors.
+- [rulelab](https://github.com/diegoperezg7/rulelab): Find which AGENTS.md rules earn their tokens.
+
 ## License
 
 [MIT](LICENSE). The three example skills in `examples/skills` are MIT too and were written for this project.
