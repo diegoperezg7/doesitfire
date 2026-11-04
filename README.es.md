@@ -79,6 +79,8 @@ Los eventos JSON en bruto de cada ejecución están en [`examples/recorded/logs/
 <p align="center"><img src="docs/assets/report-light.png" alt="HTML report" width="820"></p>
 <!-- results:end -->
 
+**claude-code: 11 ejecuciones válidas de 24 prompts (12 ejecutadas, 1 timeout excluido como infraestructura), 1 repetición. opencode: 61 ejecuciones válidas de 72 (24 prompts x 3 repeticiones, 11 HTTP 400 de Mistral excluidos). codex: no está en la demo grabada.**
+
 La suite está en [`examples/doesitfire.yaml`](examples/doesitfire.yaml) (todos los agentes con Ollama) y
 [`examples/doesitfire.mistral.yaml`](examples/doesitfire.mistral.yaml) (OpenCode con Mistral). Las ejecuciones de OpenCode con
 error son respuestas HTTP 400 de Mistral: cuando el modelo llama a una herramienta que doesitfire deniega (por ejemplo

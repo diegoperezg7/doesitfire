@@ -79,6 +79,8 @@ The raw JSON events of every run are in [`examples/recorded/logs/`](examples/rec
 <p align="center"><img src="docs/assets/report-light.png" alt="HTML report" width="820"></p>
 <!-- results:end -->
 
+**claude-code: 11 valid runs of 24 prompts (12 run, 1 timeout excluded as infrastructure), 1 repeat. opencode: 61 valid runs of 72 (24 prompts x 3 repeats, 11 Mistral HTTP 400 excluded). codex: not in the recorded demo.**
+
 The suite is [`examples/doesitfire.yaml`](examples/doesitfire.yaml) (all agents on Ollama) and
 [`examples/doesitfire.mistral.yaml`](examples/doesitfire.mistral.yaml) (OpenCode on Mistral). OpenCode's errored runs are
 HTTP 400s from Mistral: when the model calls a tool that doesitfire denies (for example `WebFetch`), OpenCode's next
