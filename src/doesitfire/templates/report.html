@@ -60,6 +60,7 @@ header.top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); padding: 14px 16px; min-width: 0; }
 .kpi .label { color: var(--muted); font-size: .8125rem; }
 .kpi .value { font: 600 1.6rem/1.2 var(--font-mono); margin-top: 4px; }
+.kpi .value .sep { color: var(--muted); font-weight: 400; }
 .kpi .hint { color: var(--muted); font-size: .75rem; margin-top: 2px; }
 h2 { font-size: 1.1rem; margin: 32px 0 6px; }
 .lead { color: var(--muted); margin: 0 0 14px; font-size: .9rem; }
@@ -100,8 +101,9 @@ details.skill[open] > summary::after { content: "−"; }
 .notes p { margin: 0 0 8px; }
 footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
 @media (max-width: 760px) {
-  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   .kpi.wide { grid-column: span 2; }
+  .kpi .value { font-size: 1.25rem; }
   table.matrix, table.matrix thead, table.matrix tbody, table.matrix tr, table.matrix th, table.matrix td { display: block; min-width: 0; width: 100%; }
   table.matrix thead { display: none; }
   .matrix tbody tr { border-bottom: 1px solid var(--border); padding: 6px 0; }
@@ -159,7 +161,7 @@ footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
       kRecall: "Recall", kRecallHint: "should-fire prompts that loaded the skill",
       kFalse: "False fires", kFalseHint: "should-not prompts that loaded it",
       kPrecision: "Precision", kPrecisionHint: "loads that were wanted",
-      kRuns: "Runs", kRunsHint: "sandboxed agent runs",
+      kAgentHint: "recall / false-fire rate", kRuns: "Runs", kRunsHint: "sandboxed agent runs",
       kCost: "Cost", kCostHint: "USD, from provider usage",
       matrixTitle: "Activation matrix",
       matrixLead: "For each skill and agent: how often the skill loaded on prompts that should trigger it (recall), and how often it loaded on prompts that should not (false fires).",
@@ -185,7 +187,7 @@ footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
       kRecall: "Recall", kRecallHint: "prompts que debían activarla y la activaron",
       kFalse: "Falsos disparos", kFalseHint: "prompts que no debían y la activaron",
       kPrecision: "Precisión", kPrecisionHint: "activaciones que tocaban",
-      kRuns: "Ejecuciones", kRunsHint: "ejecuciones de agente aisladas",
+      kAgentHint: "recall / tasa de falsos disparos", kRuns: "Ejecuciones", kRunsHint: "ejecuciones de agente aisladas",
       kCost: "Coste", kCostHint: "USD, según el uso del proveedor",
       matrixTitle: "Matriz de activación",
       matrixLead: "Para cada skill y agente: cuántas veces se cargó la skill con prompts que debían activarla (recall) y cuántas se cargó con prompts que no debían (falsos disparos).",
@@ -232,17 +234,19 @@ footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
     document.getElementById("banner").innerHTML = "<strong>" + esc(M.recorded ? t.recorded : t.live) + "</strong> · " +
       esc((M.started_at || "").slice(0, 10)) + " · doesitfire " + esc(M.version) + " · " + esc(models) + esc(hw);
 
-    var o = D.overall;
-    var k = [
-      [t.kRecall, pct(o.recall), t.kRecallHint, "c-" + rcls(o.recall), ""],
-      [t.kFalse, pct(o.false_fire_rate), t.kFalseHint, "c-" + fcls(o.false_fire_rate), ""],
-      [t.kPrecision, pct(o.precision), t.kPrecisionHint, "c-" + rcls(o.precision), ""],
-      [t.kRuns, String(D.runs), t.kRunsHint, "", ""],
-      [t.kCost, "$" + (M.cost_usd || 0).toFixed(2), t.kCostHint, "", "wide"]
-    ];
-    document.getElementById("kpis").innerHTML = k.map(function (x) {
-      return '<div class="kpi ' + x[4] + '"><div class="label">' + esc(x[0]) + '</div><div class="value ' + x[3] + '">' + esc(x[1]) + '</div><div class="hint">' + esc(x[2]) + '</div></div>';
-    }).join("");
+    // One card per agent: agents may run different models, so their numbers are never pooled.
+    var cards = S.agents.map(function (a) {
+      var c = S.totals[a], info = agentInfo(a);
+      return '<div class="kpi"><div class="label">' + esc(a) + " · " + esc(info.model || "") + '</div>' +
+        '<div class="value"><span class="c-' + rcls(c.recall) + '">' + esc(pct(c.recall)) + '</span>' +
+        ' <span class="sep">/</span> <span class="c-' + fcls(c.false_fire_rate) + '">' + esc(pct(c.false_fire_rate)) + '</span></div>' +
+        '<div class="hint">' + esc(t.kAgentHint) + '</div></div>';
+    });
+    cards.push('<div class="kpi"><div class="label">' + esc(t.kRuns) + '</div><div class="value">' + D.runs + '</div><div class="hint">' + esc(t.kRunsHint) + '</div></div>');
+    cards.push('<div class="kpi"><div class="label">' + esc(t.kCost) + '</div><div class="value">$' + (M.cost_usd || 0).toFixed(2) + '</div><div class="hint">' + esc(t.kCostHint) + '</div></div>');
+    var kp = document.getElementById("kpis");
+    kp.style.gridTemplateColumns = "repeat(" + Math.min(cards.length, 5) + ", minmax(0, 1fr))";
+    kp.innerHTML = cards.join("");
 
     var head = "<thead><tr><th>" + esc(t.skill) + "</th>" + S.agents.map(function (a) {
       var info = agentInfo(a);

@@ -58,19 +58,21 @@ Recorded on 2026-11-03 on an Apple M4, 16 GB with doesitfire 0.1.0. Each agent r
 
 | Agent | CLI | Model | Skills | Prompts | Repeats | Runs | Errored (excluded) |
 |---|---|---|---|---|---|---|---|
-| claude-code | 2.1.317 | ollama/qwen3:4b-16k | 1 | 5 | 1 | 5 | 0 |
+| claude-code | 2.1.317 | ollama/qwen3:4b-16k | 2 | 12 of 24 | 1 | 12 | 1 |
 | opencode | 1.19.5 | mistral/ministral-8b-latest | 3 | 24 | 3 | 72 | 11 |
+
+Errors: claude-code: 1 x `timeout after 900s`; opencode: 11 x `Bad Request`
 
 Fired runs / valid runs. *should* = prompts that should load the skill; *should not* = near misses.
 
 | Skill | claude-code · should / should not | opencode · should / should not |
 |---|---|---|
-| `commit-message` | 1/4 / 0/1 | 12/12 / 3/12 |
-| `regex-explainer` | 0/0 / 0/0 | 6/6 / 0/12 |
+| `commit-message` | 1/4 / 0/4 | 12/12 / 3/12 |
+| `regex-explainer` | 0/3 / 0/0 | 6/6 / 0/12 |
 | `dockerfile-review` | 0/0 / 0/0 | 12/12 / 0/7 |
-| **all** | 1/4 / 0/1 | 30/30 / 3/31 |
+| **all** | 1/7 / 0/4 | 30/30 / 3/31 |
 
-Recall per agent: claude-code 25%, opencode 100%. False-fire rate: claude-code 0%, opencode 10%.
+Recall per agent: claude-code 14%, opencode 100%. False-fire rate: claude-code 0%, opencode 10%.
 
 The raw JSON events of every run are in [`examples/recorded/logs/`](examples/recorded/logs).
 
@@ -225,8 +227,8 @@ Commit `badge.svg` and link it, or publish `badge.json` (for example to GitHub P
 
 | Agent | Live-tested with | Notes |
 |---|---|---|
-| Claude Code 2.1.317 | Ollama `qwen3:4b` (16k context) through Ollama's Anthropic-compatible `/v1/messages` | No Claude model: this release was built without an Anthropic key. `provider: anthropic` (API key or `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`) is unit-tested, not live-tested. |
-| Codex 0.166.0 | Ollama `qwen3:4b` through the Responses API | Detection is **experimental** (reads of `SKILL.md`). |
+| Claude Code 2.1.317 | Ollama `qwen3:4b` (16k context) through Ollama's Anthropic-compatible `/v1/messages`. The recorded demo has 12 of the 24 prompts (1 repeat): at 4-14 minutes per run on this laptop the rest did not finish in time | No Claude model: this release was built without an Anthropic key. `provider: anthropic` (API key or `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`) is unit-tested, not live-tested. |
+| Codex 0.166.0 | Supported; activation detection validated in the Docker integration test (real Codex CLI against the mock model), not in the recorded demo | Detection is **experimental** (reads of `SKILL.md`). A live Ollama run was started but did not finish in time for v0.1.0. |
 | OpenCode 1.19.5 | Mistral `ministral-8b-latest` (paid, OpenAI-compatible) | The recorded demo uses it. Also checked against Ollama during development. |
 
 Mistral is the only paid provider called live (OpenCode, 72 runs, cost measured from usage). Anthropic, OpenAI and

@@ -100,10 +100,19 @@ def tables(results: dict, lang: str) -> str:
         name = a["name"] + (" (experimental)" if a.get("experimental") else "")
         n_sk = len({t["skill"] for t in results["trials"] if t["agent"] == a["name"]})
         n_pr = len({(t["skill"], t["prompt"]) for t in results["trials"] if t["agent"] == a["name"]})
+        all_pr = len({(t["skill"], t["prompt"]) for t in results["trials"]})
+        of = (" de " if es else " of ") + str(all_pr) if n_pr < all_pr else ""
         lines.append(
-            f"| {name} | {a['cli_version']} | {a['provider']}/{a['model']} | {n_sk} | {n_pr} | "
+            f"| {name} | {a['cli_version']} | {a['provider']}/{a['model']} | {n_sk} | {n_pr}{of} | "
             f"{a.get('repeats', results['repeats'])} | {runs[a['name']]} | {infra[a['name']]} |"
         )
+    kinds: dict = {}
+    for t in results["trials"]:
+        if t["error"]:
+            k = (t["agent"], t["error"].split(":")[0][:60])
+            kinds[k] = kinds.get(k, 0) + 1
+    if kinds:
+        lines += ["", ("Errores: " if es else "Errors: ") + "; ".join(f"{a}: {n} x `{e}`" for (a, e), n in kinds.items())]
     lines += [
         "",
         (

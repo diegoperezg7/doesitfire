@@ -58,19 +58,21 @@ Grabado el 2026-11-03 en un Apple M4, 16 GB, con doesitfire 0.1.0. Cada agente u
 
 | Agente | CLI | Modelo | Skills | Prompts | Repeticiones | Ejecuciones | Con error (excluidas) |
 |---|---|---|---|---|---|---|---|
-| claude-code | 2.1.317 | ollama/qwen3:4b-16k | 1 | 5 | 1 | 5 | 0 |
+| claude-code | 2.1.317 | ollama/qwen3:4b-16k | 2 | 12 de 24 | 1 | 12 | 1 |
 | opencode | 1.19.5 | mistral/ministral-8b-latest | 3 | 24 | 3 | 72 | 11 |
+
+Errores: claude-code: 1 x `timeout after 900s`; opencode: 11 x `Bad Request`
 
 Activaciones / ejecuciones válidas. *debe* = prompts que deben activar la skill; *no debe* = casi-aciertos que no.
 
 | Skill | claude-code · debe / no debe | opencode · debe / no debe |
 |---|---|---|
-| `commit-message` | 1/4 / 0/1 | 12/12 / 3/12 |
-| `regex-explainer` | 0/0 / 0/0 | 6/6 / 0/12 |
+| `commit-message` | 1/4 / 0/4 | 12/12 / 3/12 |
+| `regex-explainer` | 0/3 / 0/0 | 6/6 / 0/12 |
 | `dockerfile-review` | 0/0 / 0/0 | 12/12 / 0/7 |
-| **todas** | 1/4 / 0/1 | 30/30 / 3/31 |
+| **todas** | 1/7 / 0/4 | 30/30 / 3/31 |
 
-Recall por agente: claude-code 25%, opencode 100%. Tasa de falsos disparos: claude-code 0%, opencode 10%.
+Recall por agente: claude-code 14%, opencode 100%. Tasa de falsos disparos: claude-code 0%, opencode 10%.
 
 Los eventos JSON en bruto de cada ejecución están en [`examples/recorded/logs/`](examples/recorded/logs).
 
@@ -226,8 +228,8 @@ Sube `badge.svg` al repo y enlázalo, o publica `badge.json` (por ejemplo en Git
 
 | Agente | Probado en vivo con | Notas |
 |---|---|---|
-| Claude Code 2.1.317 | Ollama `qwen3:4b` (contexto de 16k) a través del endpoint `/v1/messages` compatible con Anthropic de Ollama | Sin modelo Claude: esta versión se construyó sin clave de Anthropic. `provider: anthropic` (API key o `CLAUDE_CODE_OAUTH_TOKEN` de `claude setup-token`) tiene tests unitarios, pero no se ha probado en vivo. |
-| Codex 0.166.0 | Ollama `qwen3:4b` a través de la Responses API | La detección es **experimental** (lecturas de `SKILL.md`). |
+| Claude Code 2.1.317 | Ollama `qwen3:4b` (contexto de 16k) a través del endpoint `/v1/messages` compatible con Anthropic de Ollama. La demo grabada tiene 12 de los 24 prompts (1 repetición): a 4-14 minutos por ejecución en este portátil, el resto no terminó a tiempo | Sin modelo Claude: esta versión se construyó sin clave de Anthropic. `provider: anthropic` (API key o `CLAUDE_CODE_OAUTH_TOKEN` de `claude setup-token`) tiene tests unitarios, pero no se ha probado en vivo. |
+| Codex 0.166.0 | Soportado; la detección de activación está validada en el test de integración con Docker (el CLI real de Codex contra el modelo simulado), no en la demo grabada | La detección es **experimental** (lecturas de `SKILL.md`). Se lanzó una ejecución en vivo con Ollama que no terminó a tiempo para la v0.1.0. |
 | OpenCode 1.19.5 | Mistral `ministral-8b-latest` (de pago, compatible con OpenAI) | Es el que usa la demo grabada. También se comprobó con Ollama durante el desarrollo. |
 
 Mistral es el único proveedor de pago llamado en vivo (OpenCode, 72 ejecuciones, coste medido con el usage). Anthropic,
