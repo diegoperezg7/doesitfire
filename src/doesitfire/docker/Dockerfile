@@ -1,6 +1,6 @@
 # Agent sandbox image for doesitfire. CLI versions are pinned on purpose:
 # their JSON event formats change between releases.
-FROM node:22.21.1-bookworm-slim
+FROM node:26.13.0-bookworm-slim
 
 ARG CLAUDE_CODE_VERSION=2.1.317
 ARG CODEX_VERSION=0.166.0
