@@ -1,0 +1,48 @@
+# Example suite: three small skills, 4 prompts that should load each one and
+# 4 near misses that should not. This is the suite behind `doesitfire demo`.
+
+repeats: 3
+timeout: 300
+max_turns: 2
+
+agents:
+  claude-code: false
+  codex: false
+  opencode: {provider: mistral, model: ministral-8b-latest, price: {input: 0.10, output: 0.10}}
+
+skills:
+  - path: skills/commit-message
+    should_fire:
+      - "Write a commit message for my change: I added a login form with email and password validation."
+      - "Can you draft a conventional commit for a fix that stops the cart total going negative?"
+      - "My commit message is 'stuff'. Improve it: I renamed the User model to Account everywhere."
+      - "I bumped React from 18 to 19 and fixed two broken tests. What should the commit say?"
+    should_not_fire:
+      - "How do I undo my last git commit but keep the changes?"
+      - "Explain the difference between git merge and git rebase."
+      - "Write a CHANGELOG entry for version 2.3.0 of my library."
+      - "Write a Python function that checks whether a string is a palindrome."
+
+  - path: skills/regex-explainer
+    should_fire:
+      - "What does this regex do? ^(?:\\+34)?[6-9]\\d{8}$"
+      - "Explain this pattern token by token: (?<=\\$)\\d+(?:\\.\\d{2})?"
+      - "Why does /^\\w+@\\w+\\.com$/ not match john.doe@mail.example.com?"
+      - "I found \\b(\\w+)\\s+\\1\\b in our codebase. What is it for?"
+    should_not_fire:
+      - "Write a regex that matches US ZIP codes."
+      - "How do I replace every tab with four spaces in VS Code?"
+      - "Parse this CSV line in Python: name,age,city"
+      - "What is the time complexity of binary search?"
+
+  - path: skills/dockerfile-review
+    should_fire:
+      - "Review this Dockerfile: FROM python:latest\nCOPY . /app\nRUN pip install -r /app/requirements.txt\nCMD python /app/main.py"
+      - "My Node image is 1.4 GB. Here is the Dockerfile: FROM node:22\nCOPY . .\nRUN npm install\nCMD npm start. How do I make it smaller?"
+      - "Is this Dockerfile safe for production? FROM ubuntu\nENV API_KEY=abc123\nRUN apt-get update && apt-get install -y curl\nUSER root"
+      - "Check my Dockerfile for bad practices: FROM golang:1.23\nWORKDIR /src\nCOPY . .\nRUN go build -o app\nCMD ./app"
+    should_not_fire:
+      - "How do I list all running Docker containers?"
+      - "Write a docker-compose.yml with Postgres and Redis."
+      - "What is the difference between a Docker image and a container?"
+      - "My Kubernetes pod is stuck in CrashLoopBackOff. How do I debug it?"

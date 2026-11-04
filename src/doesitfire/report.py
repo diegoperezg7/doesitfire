@@ -73,8 +73,14 @@ def print_matrix(results: dict, console: Console | None = None) -> dict:
         table.add_row(*row)
     console.print(table)
     cost = results.get("cost_usd") or 0.0
+    reps = {a.get("repeats", results.get("repeats")) for a in results["agents"]}
+    rep_text = (
+        f"{reps.pop()} repeat(s) per prompt"
+        if len(reps) == 1
+        else "repeats " + ", ".join(f"{a['name']} {a.get('repeats')}" for a in results["agents"])
+    )
     console.print(
-        f"[dim]{len(results['trials'])} runs, {results.get('repeats')} repeat(s) per prompt, "
+        f"[dim]{len(results['trials'])} runs, {rep_text}, "
         f"{results.get('duration_s') or 0:.0f}s, cost {cost:.4f} USD[/dim]"
     )
     if any(a.get("experimental") for a in results["agents"]):

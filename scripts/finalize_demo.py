@@ -1,10 +1,14 @@
 """Turn a finished `doesitfire run` into the bundled demo: data, README tables, raw logs.
 
-usage: uv run python scripts/finalize_demo.py <run-output-dir>
+usage: uv run python scripts/finalize_demo.py <run-output-dir> [<run-output-dir> ...]
+
+Several directories are merged (for example one run per provider): trials and agents are
+concatenated, costs summed, durations summed, and each agent keeps its own repeats count.
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import shutil
@@ -16,20 +20,55 @@ from doesitfire.metrics import pct, summarize
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def main(run_dir: Path) -> None:
-    results = json.loads((run_dir / "results.json").read_text(encoding="utf-8"))
+def load_merged(run_dirs: list[Path]) -> dict:
+    merged: dict | None = None
+    for d in run_dirs:
+        r = json.loads((d / "results.json").read_text(encoding="utf-8"))
+        for a in r["agents"]:
+            a["repeats"] = r["repeats"]
+        for t in r["trials"]:
+            if t.get("log"):
+                t["log"] = str((d / t["log"]).resolve())
+        if merged is None:
+            merged = r
+            merged["sessions"] = r.get("sessions", 1)
+            continue
+        known = {a["name"] for a in merged["agents"]}
+        merged["agents"] += [a for a in r["agents"] if a["name"] not in known]
+        merged["trials"] += r["trials"]
+        merged["cost_usd"] = round(merged["cost_usd"] + r["cost_usd"], 6)
+        merged["duration_s"] = round((merged.get("duration_s") or 0) + (r.get("duration_s") or 0), 1)
+        merged["started_at"] = min(merged["started_at"], r["started_at"])
+        merged["sessions"] += r.get("sessions", 1)
+        merged["blocked_egress"] = sorted(set(merged.get("blocked_egress", [])) | set(r.get("blocked_egress", [])))
+        known_s = {s["name"] for s in merged["skills"]}
+        merged["skills"] += [s for s in r["skills"] if s["name"] not in known_s]
+    used = {t["agent"] for t in merged["trials"]}
+    merged["agents"] = [a for a in merged["agents"] if a["name"] in used]
+    merged["repeats"] = max(a["repeats"] for a in merged["agents"])
+    order = {s: i for i, s in enumerate(["commit-message", "regex-explainer", "dockerfile-review"])}
+    merged["skills"].sort(key=lambda s: order.get(s["name"], 99))
+    agent_order = {a: i for i, a in enumerate(["claude-code", "codex", "opencode"])}
+    merged["agents"].sort(key=lambda a: agent_order.get(a["name"], 99))
+    return merged
+
+
+def main(run_dirs: list[Path]) -> None:
+    results = load_merged(run_dirs)
     results["recorded"] = True
     total = sum(t["duration_s"] for t in results["trials"])
     results["duration_s"] = round(max(results.get("duration_s") or 0, total), 1)
+    results["trials"].sort(key=lambda t: (t["agent"], t["repeat"]))
     logs_out = ROOT / "examples" / "recorded" / "logs"
     if logs_out.exists():
         shutil.rmtree(logs_out)
     logs_out.mkdir(parents=True)
     for t in results["trials"]:
         log = t.get("log")
-        if log and (run_dir / log).exists():
-            shutil.copy(run_dir / log, logs_out / Path(log).name)
-            t["log"] = f"examples/recorded/logs/{Path(log).name}"
+        if log and Path(log).exists():
+            name = f"{t['agent']}-{t['skill']}-{t['expect']}-r{t['repeat']}-{hashlib.sha1(t['prompt'].encode()).hexdigest()[:8]}.jsonl"
+            shutil.copy(log, logs_out / name)
+            t["log"] = f"examples/recorded/logs/{name}"
     data = json.dumps(results, indent=2, ensure_ascii=False) + "\n"
     (ROOT / "src" / "doesitfire" / "data" / "demo-results.json").write_text(data, encoding="utf-8")
     (ROOT / "examples" / "recorded" / "results.json").write_text(data, encoding="utf-8")
@@ -52,9 +91,9 @@ def tables(results: dict, lang: str) -> str:
         "Each agent ran **its own CLI** with the model shown; read each column on its own, not as a ranking of agents."
     )
     cols = (
-        ["Agente", "CLI", "Modelo", "Skills", "Prompts", "Repeticiones", "Ejecuciones", "Errores de infraestructura"]
+        ["Agente", "CLI", "Modelo", "Skills", "Prompts", "Repeticiones", "Ejecuciones", "Con error (excluidas)"]
         if es
-        else ["Agent", "CLI", "Model", "Skills", "Prompts", "Repeats", "Runs", "Infrastructure errors"]
+        else ["Agent", "CLI", "Model", "Skills", "Prompts", "Repeats", "Runs", "Errored (excluded)"]
     )
     lines = [head, "", "| " + " | ".join(cols) + " |", "|" + "---|" * len(cols)]
     for a in results["agents"]:
@@ -63,7 +102,7 @@ def tables(results: dict, lang: str) -> str:
         n_pr = len({(t["skill"], t["prompt"]) for t in results["trials"] if t["agent"] == a["name"]})
         lines.append(
             f"| {name} | {a['cli_version']} | {a['provider']}/{a['model']} | {n_sk} | {n_pr} | "
-            f"{results['repeats']} | {runs[a['name']]} | {infra[a['name']]} |"
+            f"{a.get('repeats', results['repeats'])} | {runs[a['name']]} | {infra[a['name']]} |"
         )
     lines += [
         "",
@@ -115,4 +154,4 @@ def write_readmes(results: dict) -> None:
 
 
 if __name__ == "__main__":
-    main(Path(sys.argv[1]))
+    main([Path(p) for p in sys.argv[1:]])

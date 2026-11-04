@@ -172,7 +172,7 @@ footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
       howTitle: "How to read this",
       notes: [
         "<b>Recall</b>: share of runs on should-fire prompts where the agent loaded the skill. <b>False fires</b>: share of runs on should-not prompts where it loaded it anyway. <b>Precision</b>: of all loads, how many were wanted.",
-        "Each agent ran its real CLI headless in a Docker container with no network except the model API, side-effect tools denied and a cap of {turns} turns. Each prompt ran {repeats} times per agent because activation is not deterministic.",
+        "Each agent ran its real CLI headless in a Docker container with no network except the model API, side-effect tools denied and a cap of {turns} turns. Runs per prompt (activation is not deterministic): {repeats}.",
         "Detection: Claude Code, a <code>Skill</code> tool call in its stream-json output. OpenCode, its native <code>skill</code> tool. Codex reports no activation event, so a run counts when Codex reads the skill's <code>SKILL.md</code>; that is why it is marked experimental.",
         "A small local model does not behave like a frontier model. These numbers describe this run, with these models; run <code>doesitfire run</code> with the models you actually use."
       ],
@@ -198,7 +198,7 @@ footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
       howTitle: "Cómo leerlo",
       notes: [
         "<b>Recall</b>: parte de las ejecuciones con prompts que debían activar la skill en las que el agente la cargó. <b>Falsos disparos</b>: parte de las ejecuciones con prompts que no debían en las que la cargó igualmente. <b>Precisión</b>: de todas las cargas, cuántas tocaban.",
-        "Cada agente ejecutó su CLI real sin interfaz dentro de un contenedor Docker, sin más red que la API del modelo, con las herramientas con efectos denegadas y un máximo de {turns} turnos. Cada prompt se ejecutó {repeats} veces por agente porque la activación no es determinista.",
+        "Cada agente ejecutó su CLI real sin interfaz dentro de un contenedor Docker, sin más red que la API del modelo, con las herramientas con efectos denegadas y un máximo de {turns} turnos. Ejecuciones por prompt (la activación no es determinista): {repeats}.",
         "Detección: Claude Code, una llamada a la herramienta <code>Skill</code> en su salida stream-json. OpenCode, su herramienta nativa <code>skill</code>. Codex no emite un evento de activación, así que una ejecución cuenta cuando Codex lee el <code>SKILL.md</code> de la skill; por eso va marcado como experimental.",
         "Un modelo local pequeño no se comporta como un modelo de frontera. Estas cifras describen esta ejecución con estos modelos; lanza <code>doesitfire run</code> con los modelos que uses de verdad."
       ],
@@ -292,7 +292,8 @@ footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
         '<table class="prompts"><thead><tr><th>' + esc(t.prompt) + "</th>" + S.agents.map(function (a) { return "<th>" + esc(a) + "</th>"; }).join("") + "</tr></thead><tbody>" + body + "</tbody></table></details>";
     }).join("");
 
-    var notes = t.notes.map(function (n) { return "<p>" + fmt(n, {turns: M.max_turns, repeats: M.repeats}) + "</p>"; });
+    var reps = M.agents.map(function (a) { return a.name + " " + (a.repeats || M.repeats); }).join(", ");
+    var notes = t.notes.map(function (n) { return "<p>" + fmt(n, {turns: M.max_turns, repeats: esc(reps)}) + "</p>"; });
     if (M.blocked_egress && M.blocked_egress.length) notes.push("<p>" + esc(fmt(t.blocked, {n: M.blocked_egress.length})) + "</p>");
     document.getElementById("notes").innerHTML = notes.join("");
     document.getElementById("footer").innerHTML = esc(fmt(t.footer, {version: M.version, start: (M.started_at || "").replace("T", " ").slice(0, 16), dur: Math.round(M.duration_s || 0)})) +

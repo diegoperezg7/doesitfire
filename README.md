@@ -54,6 +54,27 @@ git clone https://github.com/diegoperezg7/doesitfire && cd doesitfire && uv run 
 ## Example output
 
 <!-- results:start -->
+Recorded on 2026-11-03 on an Apple M4, 16 GB with doesitfire 0.1.0. Each agent ran **its own CLI** with the model shown; read each column on its own, not as a ranking of agents.
+
+| Agent | CLI | Model | Skills | Prompts | Repeats | Runs | Errored (excluded) |
+|---|---|---|---|---|---|---|---|
+| claude-code | 2.1.317 | ollama/qwen3:4b-16k | 1 | 5 | 1 | 5 | 0 |
+| opencode | 1.19.5 | mistral/ministral-8b-latest | 3 | 24 | 3 | 72 | 11 |
+
+Fired runs / valid runs. *should* = prompts that should load the skill; *should not* = near misses.
+
+| Skill | claude-code · should / should not | opencode · should / should not |
+|---|---|---|
+| `commit-message` | 1/4 / 0/1 | 12/12 / 3/12 |
+| `regex-explainer` | 0/0 / 0/0 | 6/6 / 0/12 |
+| `dockerfile-review` | 0/0 / 0/0 | 12/12 / 0/7 |
+| **all** | 1/4 / 0/1 | 30/30 / 3/31 |
+
+Recall per agent: claude-code 25%, opencode 100%. False-fire rate: claude-code 0%, opencode 10%.
+
+The raw JSON events of every run are in [`examples/recorded/logs/`](examples/recorded/logs).
+
+<p align="center"><img src="docs/assets/report-light.png" alt="HTML report" width="820"></p>
 <!-- results:end -->
 
 ## Test your own skills
@@ -201,10 +222,10 @@ Commit `badge.svg` and link it, or publish `badge.json` (for example to GitHub P
 |---|---|---|
 | Claude Code 2.1.317 | Ollama `qwen3:4b` (16k context) through Ollama's Anthropic-compatible `/v1/messages` | No Claude model: this release was built without an Anthropic key. `provider: anthropic` (API key or `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`) is unit-tested, not live-tested. |
 | Codex 0.166.0 | Ollama `qwen3:4b` through the Responses API | Detection is **experimental** (reads of `SKILL.md`). |
-| OpenCode 1.19.5 | Ollama `qwen3:4b` through Chat Completions | |
+| OpenCode 1.19.5 | Mistral `ministral-8b-latest` (paid, OpenAI-compatible) | The recorded demo uses it. Also checked against Ollama during development. |
 
-Paid providers (Anthropic, OpenAI, OpenRouter, Mistral) are wired and unit-tested, including the `--max-cost` guard,
-but no paid model was called to build this release. CI runs the three real CLIs in Docker against a scripted mock
+Mistral is the only paid provider called live (OpenCode, 72 runs, cost measured from usage). Anthropic, OpenAI and
+OpenRouter are wired and unit-tested, including the `--max-cost` guard, but were not called. CI runs the three real CLIs in Docker against a scripted mock
 model ([`tests/mockmodel.py`](tests/mockmodel.py)) on every push, so a CLI output change breaks the build, not your results.
 
 Every agent runs with its CLI defaults, thinking included. Turning qwen3's thinking off in Ollama looks like a speed-up,

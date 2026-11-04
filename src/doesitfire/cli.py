@@ -241,7 +241,7 @@ def demo(
     paths = write_outputs(results, target)
     print_matrix(results, console)
     console.print(f"Report: {paths['html']}")
-    console.print("Run it yourself: [bold]doesitfire run -c examples/doesitfire.yaml[/bold] (Docker + Ollama).")
+    console.print("Run it yourself: [bold]doesitfire run -c examples/doesitfire.yaml[/bold] (needs Docker + Ollama).")
     if open_report:
         _open(paths["html"])
 

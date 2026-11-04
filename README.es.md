@@ -54,6 +54,27 @@ git clone https://github.com/diegoperezg7/doesitfire && cd doesitfire && uv run 
 ## Ejemplo de salida
 
 <!-- results:start -->
+Grabado el 2026-11-03 en un Apple M4, 16 GB, con doesitfire 0.1.0. Cada agente usó **su propio CLI** con el modelo indicado; los modelos y repeticiones pueden diferir, así que no compares agentes como si fueran el mismo experimento.
+
+| Agente | CLI | Modelo | Skills | Prompts | Repeticiones | Ejecuciones | Con error (excluidas) |
+|---|---|---|---|---|---|---|---|
+| claude-code | 2.1.317 | ollama/qwen3:4b-16k | 1 | 5 | 1 | 5 | 0 |
+| opencode | 1.19.5 | mistral/ministral-8b-latest | 3 | 24 | 3 | 72 | 11 |
+
+Activaciones / ejecuciones válidas. *debe* = prompts que deben activar la skill; *no debe* = casi-aciertos que no.
+
+| Skill | claude-code · debe / no debe | opencode · debe / no debe |
+|---|---|---|
+| `commit-message` | 1/4 / 0/1 | 12/12 / 3/12 |
+| `regex-explainer` | 0/0 / 0/0 | 6/6 / 0/12 |
+| `dockerfile-review` | 0/0 / 0/0 | 12/12 / 0/7 |
+| **todas** | 1/4 / 0/1 | 30/30 / 3/31 |
+
+Recall por agente: claude-code 25%, opencode 100%. Tasa de falsos disparos: claude-code 0%, opencode 10%.
+
+Los eventos JSON en bruto de cada ejecución están en [`examples/recorded/logs/`](examples/recorded/logs).
+
+<p align="center"><img src="docs/assets/report-light.png" alt="HTML report" width="820"></p>
 <!-- results:end -->
 
 ## Prueba tus propias skills
@@ -201,10 +222,10 @@ Sube `badge.svg` al repo y enlázalo, o publica `badge.json` (por ejemplo en Git
 |---|---|---|
 | Claude Code 2.1.317 | Ollama `qwen3:4b` (contexto de 16k) a través del endpoint `/v1/messages` compatible con Anthropic de Ollama | Sin modelo Claude: esta versión se construyó sin clave de Anthropic. `provider: anthropic` (API key o `CLAUDE_CODE_OAUTH_TOKEN` de `claude setup-token`) tiene tests unitarios, pero no se ha probado en vivo. |
 | Codex 0.166.0 | Ollama `qwen3:4b` a través de la Responses API | La detección es **experimental** (lecturas de `SKILL.md`). |
-| OpenCode 1.19.5 | Ollama `qwen3:4b` a través de Chat Completions | |
+| OpenCode 1.19.5 | Mistral `ministral-8b-latest` (de pago, compatible con OpenAI) | Es el que usa la demo grabada. También se comprobó con Ollama durante el desarrollo. |
 
-Los proveedores de pago (Anthropic, OpenAI, OpenRouter, Mistral) están conectados y tienen tests unitarios, incluido el
-límite `--max-cost`, pero para construir esta versión no se llamó a ningún modelo de pago. En cada push, la CI ejecuta
+Mistral es el único proveedor de pago llamado en vivo (OpenCode, 72 ejecuciones, coste medido con el usage). Anthropic,
+OpenAI y OpenRouter están conectados y tienen tests unitarios, incluido el límite `--max-cost`, pero no se han llamado. En cada push, la CI ejecuta
 los tres CLIs reales en Docker contra un modelo simulado ([`tests/mockmodel.py`](tests/mockmodel.py)), así que si
 cambia la salida de un CLI se rompe la build, no tus resultados.
 
